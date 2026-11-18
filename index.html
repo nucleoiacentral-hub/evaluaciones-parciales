@@ -798,17 +798,34 @@
 
     // Detiene la grabación actual y devuelve el blob del bloque
     function detenerYCapturar() {
-      return new Promise(resolve => {
-        if (!recorder || recorder.state === "inactive") { resolve(null); return; }
-        const rec = recorder;
-        rec.onstop = () => {
-          const blob = new Blob(chunks, { type: rec.mimeType || "video/webm" });
-          chunks = [];
-          resolve(blob);
-        };
-        rec.stop();
-      });
+  return new Promise(resolve => {
+    if (!recorder) { resolve(null); return; }
+    const rec = recorder;
+
+    // Si ya estaba inactivo pero quedaron chunks acumulados, los rescatamos
+    if (rec.state === "inactive") {
+      if (chunks.length > 0) {
+        const blob = new Blob(chunks, { type: rec.mimeType || "video/webm" });
+        chunks = [];
+        resolve(blob);
+      } else {
+        resolve(null);
+      }
+      return;
     }
+
+    rec.onstop = () => {
+      const blob = new Blob(chunks, { type: rec.mimeType || "video/webm" });
+      chunks = [];
+      resolve(blob);
+    };
+
+    try {
+      rec.requestData(); // Fuerza a volcar lo que lleva grabado hasta ese milisegundo
+    } catch (e) {}
+    rec.stop();
+  });
+}
 
     // Corta el bloque, reinicia la grabación y sube en segundo plano
     async function cortarYSubir(nombreBase, reiniciar) {
