@@ -16,61 +16,32 @@
       --text: #111827;
       --muted: #6B7280;
     }
-
-    * {
-      box-sizing: border-box;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-
-    input, textarea {
-      -webkit-user-select: text;
-      -moz-user-select: text;
-      -ms-user-select: text;
-      user-select: text;
-    }
-
+    * { box-sizing: border-box; user-select: none; -webkit-user-select: none; }
+    input, textarea { user-select: text; -webkit-user-select: text; }
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--bg);
+      background: var(--bg);
       color: var(--text);
       line-height: 1.5;
       overflow-x: hidden;
     }
-
+    .hidden { display: none !important; }
     header {
-      background-color: var(--primary);
+      background: var(--primary);
       color: #fff;
       padding: 14px 24px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
       position: sticky;
       top: 0;
       z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
     }
-
-    header h1 {
-      margin: 0;
-      font-size: 1.15rem;
-      font-weight: 600;
-    }
-
-    header .sub {
-      font-size: 0.85rem;
-      opacity: 0.9;
-    }
-
-    .container {
-      max-width: 860px;
-      margin: 28px auto;
-      padding: 0 16px;
-    }
-
+    header h1 { margin: 0; font-size: 1.15rem; font-weight: 600; }
+    header .sub { font-size: 0.85rem; opacity: 0.9; }
+    .container { max-width: 860px; margin: 28px auto; padding: 0 16px; }
     .card {
       background: var(--card);
       border-radius: 12px;
@@ -78,24 +49,9 @@
       box-shadow: 0 4px 14px rgba(0,0,0,0.07);
       margin-bottom: 20px;
     }
-
-    h2 {
-      margin-top: 0;
-      color: var(--primary);
-      font-size: 1.35rem;
-    }
-
-    .form-group {
-      margin-bottom: 18px;
-    }
-
-    label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 6px;
-      font-size: 0.95rem;
-    }
-
+    h2 { margin-top: 0; color: var(--primary); font-size: 1.35rem; }
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 0.95rem; }
     input[type="text"], input[type="password"] {
       width: 100%;
       padding: 12px 14px;
@@ -103,19 +59,14 @@
       border-radius: 8px;
       font-size: 1rem;
       outline: none;
-      transition: border-color 0.2s;
     }
-
-    input:focus {
-      border-color: var(--primary);
-    }
-
+    input[type="text"]:focus, input[type="password"]:focus { border-color: var(--primary); }
     .btn {
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      background-color: var(--primary);
+      background: var(--primary);
       color: #fff;
       border: none;
       padding: 12px 22px;
@@ -123,52 +74,17 @@
       font-weight: 600;
       border-radius: 8px;
       cursor: pointer;
-      transition: background 0.2s, opacity 0.2s;
       width: 100%;
     }
-
-    .btn:hover:not(:disabled) {
-      background-color: var(--primary-dark);
-    }
-
-    .btn:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-
-    .btn-danger {
-      background-color: var(--danger);
-    }
-
-    .btn-success {
-      background-color: var(--success);
-    }
-
-    .alert {
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      font-size: 0.92rem;
-    }
-
-    .alert-info {
-      background: #EFF6FF;
-      border-left: 4px solid var(--primary);
-      color: #1E40AF;
-    }
-
-    .alert-warning {
-      background: #FFFBEB;
-      border-left: 4px solid var(--warning);
-      color: #92400E;
-    }
-
-    .alert-danger {
-      background: #FEF2F2;
-      border-left: 4px solid var(--danger);
-      color: #991B1B;
-    }
-
+    .btn:hover:not(:disabled) { background: var(--primary-dark); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .btn-success { background: var(--success); }
+    .btn-danger { background: var(--danger); }
+    .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
+    .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.92rem; }
+    .alert-info { background: #EFF6FF; border-left: 4px solid var(--primary); color: #1E40AF; }
+    .alert-warning { background: #FFFBEB; border-left: 4px solid var(--warning); color: #92400E; }
+    .alert-danger { background: #FEF2F2; border-left: 4px solid var(--danger); color: #991B1B; }
     .privacy-box {
       background: #F9FAFB;
       border: 1px solid #E5E7EB;
@@ -180,22 +96,19 @@
       overflow-y: auto;
       margin-bottom: 14px;
     }
-
     .checkbox-row {
       display: flex;
       align-items: flex-start;
       gap: 10px;
-      margin-bottom: 18px;
+      margin-bottom: 14px;
       font-size: 0.92rem;
       cursor: pointer;
+      font-weight: 400;
     }
+    .checkbox-row input { margin-top: 4px; transform: scale(1.2); }
+    .instr-list li { margin-bottom: 8px; }
 
-    .checkbox-row input {
-      margin-top: 4px;
-      transform: scale(1.2);
-    }
-
-    /* Monitor de cámara flotante REC */
+    /* Monitor flotante REC */
     #proctor-pip {
       position: fixed;
       bottom: 16px;
@@ -209,7 +122,6 @@
       border: 2px solid #374151;
       display: none;
     }
-
     #proctor-pip video {
       width: 100%;
       height: 120px;
@@ -218,7 +130,6 @@
       display: block;
       background: #000;
     }
-
     .rec-badge {
       position: absolute;
       top: 8px;
@@ -233,7 +144,6 @@
       align-items: center;
       gap: 5px;
     }
-
     .rec-dot {
       width: 8px;
       height: 8px;
@@ -241,12 +151,7 @@
       border-radius: 50%;
       animation: blink 1s infinite;
     }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.2; }
-    }
-
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.2; } }
     .pip-footer {
       padding: 6px 10px;
       color: #E5E7EB;
@@ -255,121 +160,33 @@
       justify-content: space-between;
       align-items: center;
     }
+    .db-meter { width: 55px; height: 6px; background: #374151; border-radius: 4px; overflow: hidden; }
+    .db-fill { height: 100%; width: 10%; background: #10B981; transition: width 0.15s, background 0.15s; }
 
-    .db-meter {
-      width: 55px;
-      height: 6px;
-      background: #374151;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-
-    .db-fill {
-      height: 100%;
-      width: 10%;
-      background: #10B981;
-      transition: width 0.15s, background 0.15s;
-    }
-
-    /* Marca de agua dinámica */
     #watermark {
       position: fixed;
       pointer-events: none;
       z-index: 800;
       font-size: 0.85rem;
       font-weight: 700;
-      color: rgba(17, 24, 39, 0.09);
+      color: rgba(17,24,39,0.09);
       transform: rotate(-18deg);
       white-space: nowrap;
       display: none;
       transition: top 4s ease-in-out, left 4s ease-in-out;
     }
 
-    /* Barra superior del examen */
-    .exam-hud {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-      background: #fff;
-      padding: 14px 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-      margin-bottom: 20px;
-    }
-
-    .timer-box {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: var(--primary);
-      background: #EFF6FF;
-      padding: 6px 14px;
-      border-radius: 8px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .strikes-box {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--danger);
-      background: #FEF2F2;
-      padding: 6px 12px;
-      border-radius: 8px;
-    }
-
-    /* Preguntas */
-    .question-card {
-      background: #fff;
-      border-radius: 10px;
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-      border-left: 4px solid var(--primary);
-    }
-
-    .q-title {
-      font-weight: 600;
-      font-size: 1.05rem;
-      margin-bottom: 14px;
-    }
-
-    .option-label {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 11px 14px;
-      border: 1.5px solid #E5E7EB;
-      border-radius: 8px;
-      margin-bottom: 9px;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-weight: 400;
-    }
-
-    .option-label:hover {
-      background: #F9FAFB;
-      border-color: var(--primary);
-    }
-
-    .option-label input[type="radio"] {
-      margin-top: 4px;
-      accent-color: var(--primary);
-      transform: scale(1.15);
-    }
-
-    /* Modales de bloqueo / Paneo / Advertencias */
+    /* Modales */
     .modal-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(17, 24, 39, 0.92);
+      background: rgba(17,24,39,0.92);
       z-index: 2000;
       display: none;
       align-items: center;
       justify-content: center;
       padding: 20px;
     }
-
     .modal-box {
       background: #fff;
       max-width: 480px;
@@ -379,25 +196,8 @@
       text-align: center;
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
-
-    .progress-bar {
-      width: 100%;
-      height: 12px;
-      background: #E5E7EB;
-      border-radius: 999px;
-      overflow: hidden;
-      margin: 16px 0;
-    }
-
-    .progress-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--primary);
-      transition: width 0.25s linear;
-    }
-
-    .hidden { display: none !important; }
-
+    .progress-bar { width: 100%; height: 12px; background: #E5E7EB; border-radius: 999px; overflow: hidden; margin: 16px 0; }
+    .progress-fill { height: 100%; width: 0%; background: var(--primary); transition: width 0.25s linear; }
     .preview-video {
       width: 100%;
       max-width: 340px;
@@ -410,49 +210,81 @@
       display: block;
     }
 
-    /* Adaptación responsiva para celulares pequeños */
-    @media (max-width: 600px) {
-      body {
-        padding-bottom: 115px;
-      }
-      header {
-        padding: 12px 16px;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
-      #proctor-pip {
-        width: 115px;
-        bottom: 10px;
-        right: 10px;
-      }
-      #proctor-pip video {
-        height: 80px;
-      }
-      .pip-footer {
-        padding: 4px 6px;
-        font-size: 0.65rem;
-      }
-      .db-meter {
-        width: 35px;
-      }
-      .card, .question-card {
-        padding: 18px 14px;
-      }
-      .exam-hud {
-        padding: 12px 14px;
-      }
-      .timer-box {
-        font-size: 1.1rem;
-        padding: 4px 10px;
-      }
-      .strikes-box {
-        font-size: 0.82rem;
-        padding: 4px 10px;
-      }
-      .modal-box {
-        padding: 20px 16px;
-      }
+    /* Examen */
+    .exam-hud {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      background: #fff;
+      padding: 14px 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      margin-bottom: 12px;
+    }
+    .timer-box {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: #EFF6FF;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+    .strikes-box {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--danger);
+      background: #FEF2F2;
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+    .status-line { font-size: 0.85rem; font-weight: 600; margin-bottom: 14px; }
+    .q-progress-wrap { background: #E5E7EB; height: 8px; border-radius: 999px; overflow: hidden; margin-bottom: 8px; }
+    .q-progress-fill { height: 100%; width: 0%; background: var(--primary); transition: width 0.3s; }
+    .q-label { font-size: 0.9rem; color: var(--muted); margin-bottom: 14px; }
+    .question-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      border-left: 4px solid var(--primary);
+    }
+    .q-title { font-weight: 600; font-size: 1.08rem; margin-bottom: 16px; }
+    .option-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 11px 14px;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 8px;
+      margin-bottom: 9px;
+      cursor: pointer;
+      font-weight: 400;
+    }
+    .option-label:hover { background: #F9FAFB; border-color: var(--primary); }
+    .option-label input[type="radio"] { margin-top: 4px; accent-color: var(--primary); transform: scale(1.15); }
+    .nav { margin-top: 18px; }
+
+    /* Pantalla final */
+    .score-box {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--primary);
+      background: #EFF6FF;
+      padding: 14px;
+      border-radius: 10px;
+      margin: 16px 0;
+    }
+    .folio-box {
+      background: #F3F4F6;
+      padding: 16px;
+      border-radius: 10px;
+      margin: 14px 0;
+      font-family: monospace;
+      font-size: 1.1rem;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -463,37 +295,36 @@
       <h1 id="hdr-title">Portal Integral de Evaluación Supervisada</h1>
       <div class="sub" id="hdr-sub">Sistema de Supervisión Académica</div>
     </div>
-    <div id="hdr-status" style="font-size:0.82rem; opacity:0.9;">Conexión segura</div>
+    <div style="font-size:0.82rem; opacity:0.9;">Conexión segura</div>
   </header>
 
   <div id="watermark"></div>
 
-  <!-- Monitor flotante en vivo -->
   <div id="proctor-pip">
     <div class="rec-badge"><span class="rec-dot"></span> REC</div>
     <video id="pip-video" autoplay muted playsinline></video>
     <div class="pip-footer">
       <span id="pip-mat">---</span>
-      <div class="db-meter" title="Nivel de audio"><div class="db-fill" id="pip-db"></div></div>
+      <div class="db-meter"><div class="db-fill" id="pip-db"></div></div>
     </div>
   </div>
 
-  <!-- Modal de Advertencias / Faltas -->
+  <!-- Advertencias -->
   <div class="modal-overlay" id="modal-warning">
     <div class="modal-box">
-      <h2 style="color: var(--danger); margin-bottom: 8px;" id="warn-title">⚠️ ADVERTENCIA DE SUPERVISIÓN</h2>
-      <p id="warn-msg" style="font-size: 1rem; margin-bottom: 16px;"></p>
+      <h2 style="color:var(--danger);">⚠️ ADVERTENCIA DE SUPERVISIÓN</h2>
+      <p id="warn-msg" style="font-size:1rem;"></p>
       <div class="alert alert-danger" id="warn-counter" style="font-weight:700;"></div>
-      <button class="btn btn-danger" id="btn-resume-fullscreen">Volver a Pantalla Completa y Continuar</button>
+      <button class="btn btn-danger" id="btn-resume-fullscreen">Volver a pantalla completa y continuar</button>
     </div>
   </div>
 
-  <!-- Modal de Paneo Ambiental 360° (Inicial y Aleatorio) -->
+  <!-- Paneo 360° -->
   <div class="modal-overlay" id="modal-pan">
     <div class="modal-box">
-      <h2 id="pan-title">🎥 Verificación Ambiental de Entorno (360°)</h2>
-      <p id="pan-desc" style="font-size:0.95rem; color:#374151;">
-        Gira lentamente tu cámara o dispositivo para mostrar tu escritorio y el espacio alrededor durante <strong>8 segundos</strong>. El temporizador de tu examen está pausado.
+      <h2 id="pan-title">🎥 Verificación de entorno</h2>
+      <p style="font-size:0.95rem; color:#374151;">
+        Gira lentamente tu cámara para mostrar tu escritorio y el espacio alrededor durante <strong>8 segundos</strong>. El cronómetro está pausado.
       </p>
       <video id="pan-video" class="preview-video" autoplay muted playsinline></video>
       <div class="progress-bar"><div class="progress-fill" id="pan-progress"></div></div>
@@ -501,69 +332,84 @@
     </div>
   </div>
 
+  <!-- Espera / reintentos -->
+  <div class="modal-overlay" id="modal-busy" style="z-index:2500;">
+    <div class="modal-box">
+      <p id="busy-text" style="font-size:1rem; font-weight:600;"></p>
+      <button class="btn hidden" id="btn-reintentar-envio" style="margin-top:12px;">Reintentar</button>
+    </div>
+  </div>
+
   <div class="container">
 
-    <!-- PANTALLA 1: ACCESO Y VALIDACIÓN DE CLAVE -->
+    <!-- PANTALLA 1: ACCESO -->
     <div class="card" id="step-login">
       <h2>Ingreso a Evaluación Parcial</h2>
       <p style="color:var(--muted); margin-top:-6px; margin-bottom:18px;">
-        Introduce tu número de cuenta/matrícula y la clave proporcionada por tu profesor.
+        Introduce tu matrícula y la clave proporcionada por tu profesor.
       </p>
-
       <div id="login-error" class="alert alert-danger hidden"></div>
-
       <div class="form-group">
-        <label for="inp-matricula">Matrícula / Número de Cuenta</label>
+        <label for="inp-matricula">Matrícula / Número de cuenta</label>
         <input type="text" id="inp-matricula" placeholder="Ej. 2371624" autocomplete="off" />
       </div>
-
       <div class="form-group">
-        <label for="inp-clave">Clave del Examen</label>
-        <input type="password" id="inp-clave" placeholder="Ej. GEOPARCIAL2026" autocomplete="off" />
+        <label for="inp-clave">Clave del examen</label>
+        <input type="password" id="inp-clave" autocomplete="off" />
       </div>
-
-      <button class="btn" id="btn-verificar">Verificar Acceso</button>
+      <button class="btn" id="btn-verificar">Verificar acceso</button>
     </div>
 
-    <!-- PANTALLA 2: AVISO DE PRIVACIDAD, REGLAS Y CALIBRACIÓN DE CÁMARA/RUIDO -->
+    <!-- PANTALLA 2: PRIVACIDAD Y CALIBRACIÓN -->
     <div class="card hidden" id="step-calibration">
-      <h2 id="cal-materia">Verificación Técnica y Privacidad</h2>
+      <h2 id="cal-materia">Verificación técnica y privacidad</h2>
       <p id="cal-info" style="color:var(--muted); margin-top:-6px;"></p>
 
       <div class="privacy-box">
-        <strong>Aviso de Privacidad y Supervisión Académica (LFPDPPP):</strong><br>
-        Con el único propósito de garantizar la integridad académica de esta evaluación parcial, esta plataforma capturará audio, video e imágenes periódicas de tu entorno durante el desarrollo de la prueba, así como registros técnicos de actividad en pantalla. Las evidencias se almacenarán de forma confidencial en la carpeta institucional del docente titular de la asignatura y serán utilizadas exclusivamente para fines de auditoría y validación académica. Al marcar la casilla inferior, otorgas tu consentimiento expreso para el tratamiento de estos datos.
-      </div>
-
-      <div class="alert alert-warning">
-        <strong>Reglas estrictas de aplicación:</strong>
-        <ul style="margin:6px 0 0 18px; padding:0;">
-          <li>Mantén tu rostro visible y el micrófono activo en un entorno silencioso.</li>
-          <li>El examen opera en <strong>pantalla completa obligatoria</strong>.</li>
-          <li>Salir de pantalla completa, cambiar de pestaña/app o tapar la cámara genera una falta. Al acumular <strong>3 advertencias</strong>, el examen se bloqueará y enviará automáticamente.</li>
-        </ul>
+        <strong>Aviso de privacidad y supervisión académica (LFPDPPP):</strong><br>
+        Con el único propósito de garantizar la integridad académica de esta evaluación parcial, esta plataforma capturará audio, video e imágenes de tu entorno durante la prueba, así como registros técnicos de actividad en pantalla. Las evidencias se almacenarán de forma confidencial en la carpeta institucional del docente titular y se usarán exclusivamente para auditoría y validación académica. Al marcar la casilla, otorgas tu consentimiento expreso para el tratamiento de estos datos.
       </div>
 
       <label class="checkbox-row">
         <input type="checkbox" id="chk-consent" />
-        <span>He leído y acepto el aviso de privacidad, las reglas de supervisión y autorizo la grabación de audio y video de mi sesión.</span>
+        <span>He leído y acepto el aviso de privacidad y autorizo la grabación de audio y video de mi sesión.</span>
       </label>
 
-      <div id="hardware-box" class="hidden" style="text-align:center; margin-top:16px;">
+      <div id="hardware-box" class="hidden" style="text-align:center; margin-top:14px;">
         <video id="setup-video" class="preview-video" autoplay muted playsinline></video>
-        <div id="noise-status" class="alert alert-info" style="margin-top:12px;">
-          Calibrando nivel de ruido ambiental (5 seg)... Mantén silencio.
-        </div>
+        <div id="noise-status" class="alert alert-info" style="margin-top:12px;">Calibrando ruido ambiental...</div>
         <div class="progress-bar"><div class="progress-fill" id="noise-progress"></div></div>
       </div>
 
       <div id="cal-error" class="alert alert-danger hidden"></div>
 
-      <button class="btn" id="btn-activate-devices" disabled>1. Activar Cámara y Verificar Ruido Ambiental</button>
-      <button class="btn btn-success hidden" id="btn-start-exam" style="margin-top:10px;">2. Iniciar Paneo 360° y Comenzar Examen</button>
+      <button class="btn" id="btn-activate-devices" disabled>1. Activar cámara y medir ruido ambiental</button>
+      <button class="btn btn-success hidden" id="btn-to-instructions" style="margin-top:10px;">2. Continuar</button>
     </div>
 
-    <!-- PANTALLA 3: APLICACIÓN DEL EXAMEN -->
+    <!-- PANTALLA 3: INSTRUCCIONES -->
+    <div class="card hidden" id="step-instructions">
+      <h2>Instrucciones antes de iniciar</h2>
+      <div class="alert alert-warning">
+        Durante todo el examen debes estar <strong>solo</strong> en el espacio donde te grabas. Si alguien entra, la evidencia quedará registrada.
+      </div>
+      <ul class="instr-list">
+        <li>No tengo cuadernos, libros, apuntes ni hojas a mi alcance.</li>
+        <li>No tengo celular, tablet, laptop ni otro equipo al alcance (salvo el que usaré para el examen).</li>
+        <li>Solo yo estoy en el lugar donde presento el examen.</li>
+        <li>Mantengo mi rostro visible y el micrófono activo durante toda la evaluación.</li>
+      </ul>
+
+      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Confirmo que cumplo con las cuatro condiciones anteriores.</span></label>
+      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que el examen se realiza en pantalla completa.</span></label>
+      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que salir de pantalla completa, cambiar de pestaña o tapar la cámara genera una advertencia; con 3 advertencias el examen se cierra.</span></label>
+
+      <div id="inst-error" class="alert alert-danger hidden" style="margin-top:12px;"></div>
+
+      <button class="btn" id="btn-iniciar" disabled style="margin-top:10px;">Iniciar examen (realiza paneo inicial)</button>
+    </div>
+
+    <!-- PANTALLA 4: EXAMEN, PREGUNTA POR PREGUNTA -->
     <div id="step-exam" class="hidden">
       <div class="exam-hud">
         <div>
@@ -574,25 +420,30 @@
         <div class="timer-box" id="hud-timer">60:00</div>
       </div>
 
-      <div id="questions-container"></div>
+      <div class="status-line" id="evid-hud">Evidencias subidas: 0</div>
 
-      <div class="card" style="text-align:center;">
-        <p style="color:var(--muted); font-size:0.9rem; margin-bottom:14px;">
-          Revisa que hayas respondido todas las preguntas antes de finalizar. Una vez enviado, no podrás modificar tus respuestas.
-        </p>
-        <button class="btn btn-success" id="btn-submit-exam">Finalizar y Enviar Examen</button>
+      <div class="q-progress-wrap"><div class="q-progress-fill" id="q-barra"></div></div>
+      <div class="q-label" id="q-progreso">Pregunta 1 de 30</div>
+
+      <div id="question-container"></div>
+
+      <div class="nav">
+        <button class="btn" id="btn-siguiente">Siguiente pregunta</button>
       </div>
     </div>
 
-    <!-- PANTALLA 4: CONFIRMACIÓN Y FOLIO -->
+    <!-- PANTALLA 5: FINAL -->
     <div class="card hidden" id="step-finish" style="text-align:center;">
-      <h2 style="color:var(--success);" id="fin-title">✅ Evaluación Registrada Exitosamente</h2>
+      <h2 id="fin-title" style="color:var(--success);">✅ Evaluación registrada</h2>
       <p id="fin-desc" style="font-size:1rem; color:#374151;"></p>
-      <div style="background:#F3F4F6; padding:16px; border-radius:10px; margin:18px 0; font-family:monospace; font-size:1.15rem; font-weight:700;" id="fin-folio">
-        FOLIO: ---
-      </div>
-      <p style="font-size:0.85rem; color:var(--muted);">
-        Ya puedes cerrar esta ventana. Tu profesor publicará los resultados una vez concluida la revisión de evidencias.
+      <div class="score-box" id="fin-score"></div>
+      <div class="folio-box" id="fin-folio">FOLIO: ---</div>
+      <p id="fin-evid" style="font-size:0.9rem; color:var(--muted);"></p>
+
+      <button class="btn btn-success" id="btn-descargar" style="margin-top:12px;">Descargar mi comprobante (PNG)</button>
+      <button class="btn btn-outline" id="btn-ver-imagen" style="margin-top:10px;">Ver comprobante para guardarlo</button>
+      <p style="font-size:0.85rem; color:var(--muted); margin-top:16px;">
+        Descarga tu comprobante antes de cerrar esta ventana. Tu profesor publicará los resultados tras revisar las evidencias.
       </p>
     </div>
 
@@ -600,61 +451,113 @@
 
   <script>
     // =========================================================================
-    // CONFIGURACIÓN CENTRAL (URL DE TU SCRIPT_DIRECTORIO)
+    // CONFIGURACIÓN
     // =========================================================================
     const DIRECTORIO_URL = "https://script.google.com/macros/s/AKfycbwCtzJJHR9J2Rb8nUQzdl_mBR-mpESrGNNj_lBkzdWoqnqfYpg9kU_eV8A2keHC9-IM/exec";
+    const TAM_BLOQUE = 5;
 
-    // Estado global de la sesión
-    let materiaEndpoint = "";
-    let examConfig = {};
-    let alumnoData = {};
-    let preguntasList = [];
-    let respuestasUsuario = {};
+    // =========================================================================
+    // ESTADO
+    // =========================================================================
+    let stream = null, recorder = null, chunks = [];
+    let recordingSupported = false, recordingMode = "Video+Audio";
+    let audioCtx = null, analyser = null, alertasAudio = 0;
+    let materiaEndpoint = "", alumno = {}, examCfg = {}, preguntas = [], respuestas = {}, qIndex = 0;
+    let examActive = false, pausedForPan = false, finalizando = false;
+    let secondsLeft = 3600, timerId = null, monitorId = null, fallbackId = null;
+    let faltas = 0, maxFaltas = 3, bitacora = [], lastViolation = 0;
+    let panAleatorioQ = 0, panAleatorioHecho = false;
+    let bloqueInicio = 0;
+    let inflight = [], pendientes = [], subidas = 0;
+    let evidenciaFinal = null, resultadoFinal = null;
 
-    // Supervisión, audio y video
-    let mediaStream = null;
-    let mediaRecorder = null;
-    let recordedChunks = [];
-    let chunkCounter = 1;
-    let chunkInterval = null;
-    let fallbackPhotoInterval = null;
-    let recordingMode = "Video+Audio";
+    const pad = n => String(n).padStart(2, "0");
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-    let audioCtx = null;
-    let analyser = null;
-    let audioMonitorInterval = null;
-    let watermarkInterval = null;
-    let alertasAudio = 0;
-
-    // Tiempos, faltas y bitácora
-    let examActive = false;
-    let examPausedForPan = false;
-    let warningModalOpen = false;
-    let totalSecondsLeft = 3600;
-    let timerInterval = null;
-    let randomPanTimeout = null;
-    let faltasCount = 0;
-    let maxAdvertencias = 3;
-    let bitacoraEventos = [];
-    let lastViolationTime = 0;
-
-    // Utilidad CORS-safe para Google Apps Script (text/plain evita preflight OPTIONS)
-    async function postGAS(url, payloadObj) {
+    // =========================================================================
+    // UTILIDADES
+    // =========================================================================
+    async function postGAS(url, payload) {
       const res = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payloadObj)
+        body: JSON.stringify(payload)
       });
       return await res.json();
     }
 
     function logEvent(msg) {
-      const now = new Date().toLocaleTimeString("es-MX", { hour12: false });
-      bitacoraEventos.push(`[${now}] ${msg}`);
+      bitacora.push(`[${new Date().toLocaleTimeString("es-MX", { hour12: false })}] ${msg}`);
+    }
+
+    function blobToBase64(blob) {
+      return new Promise((resolve, reject) => {
+        const r = new FileReader();
+        r.onloadend = () => resolve(r.result);
+        r.onerror = reject;
+        r.readAsDataURL(blob);
+      });
+    }
+
+    function setBusy(on, texto = "", conBoton = false) {
+      document.getElementById("modal-busy").style.display = on ? "flex" : "none";
+      document.getElementById("busy-text").textContent = texto;
+      document.getElementById("btn-reintentar-envio").classList.toggle("hidden", !conBoton);
+    }
+
+    function esperarReintento() {
+      return new Promise(resolve => {
+        const b = document.getElementById("btn-reintentar-envio");
+        b.onclick = () => { b.classList.add("hidden"); resolve(); };
+      });
+    }
+
+    function actualizarEstadoEvidencia() {
+      const el = document.getElementById("evid-hud");
+      el.textContent = `Evidencias subidas: ${subidas} · Pendientes: ${pendientes.length}`;
+      el.style.color = pendientes.length ? "var(--danger)" : "var(--success)";
+    }
+
+    function nivelAudio() {
+      if (!analyser) return 0;
+      const arr = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(arr);
+      let s = 0;
+      for (const v of arr) s += v;
+      return s / arr.length;
+    }
+
+    function lenteTapado() {
+      const v = document.getElementById("pip-video");
+      if (!v || v.readyState < 2) return false;
+      const c = document.createElement("canvas");
+      c.width = 32; c.height = 24;
+      const ctx = c.getContext("2d");
+      ctx.drawImage(v, 0, 0, 32, 24);
+      const d = ctx.getImageData(0, 0, 32, 24).data;
+      let s = 0;
+      for (let i = 0; i < d.length; i += 4) s += (d[i] + d[i + 1] + d[i + 2]) / 3;
+      return s / (d.length / 4) < 6;
+    }
+
+    async function enterFullscreen() {
+      const el = document.documentElement;
+      if (!document.fullscreenElement && el.requestFullscreen) {
+        await el.requestFullscreen().catch(() => {});
+      }
+    }
+
+    function apagarDispositivos() {
+      if (stream) stream.getTracks().forEach(t => t.stop());
+      document.getElementById("proctor-pip").style.display = "none";
+      document.getElementById("watermark").style.display = "none";
+      if (document.fullscreenElement && document.exitFullscreen) {
+        document.exitFullscreen().catch(() => {});
+      }
     }
 
     // =========================================================================
-    // PASO 1: VERIFICAR CLAVE EN DIRECTORIO Y DISPONIBILIDAD HORARIA
+    // PASO 1: ACCESO
     // =========================================================================
     document.getElementById("btn-verificar").addEventListener("click", async () => {
       const matricula = document.getElementById("inp-matricula").value.trim();
@@ -664,140 +567,116 @@
 
       errBox.classList.add("hidden");
       if (!matricula || !clave) {
-        errBox.textContent = "Por favor ingresa tu matrícula y la clave del examen.";
+        errBox.textContent = "Ingresa tu matrícula y la clave del examen.";
         errBox.classList.remove("hidden");
         return;
       }
 
       btn.disabled = true;
-      btn.textContent = "Validando clave y horario oficial...";
+      btn.textContent = "Validando clave y horario...";
 
       try {
         const dirRes = await postGAS(DIRECTORIO_URL, { claveExamen: clave });
-        if (dirRes.status !== "ok" || !dirRes.grupoInfo || !dirRes.grupoInfo.endpoint) {
-          throw new Error(dirRes.message || "Clave de examen no válida o inactiva.");
+        if (dirRes.status !== "ok" || !dirRes.grupoInfo) {
+          throw new Error(dirRes.message || "Clave no válida.");
         }
-
         materiaEndpoint = dirRes.grupoInfo.endpoint;
 
         const dispRes = await postGAS(materiaEndpoint, { action: "consultar_disponibilidad" });
-        if (dispRes.status !== "ok") {
-          throw new Error(dispRes.message || "No se pudo verificar el horario del examen.");
-        }
+        if (dispRes.status !== "ok") throw new Error(dispRes.message || "No se pudo verificar el horario.");
 
         const meta = dispRes.meta;
-        if (meta.estadoHorario === "PROXIMAMENTE") {
-          throw new Error(`Este examen aún no abre. Horario oficial de apertura: ${meta.apertura} hrs.`);
-        }
-        if (meta.estadoHorario === "CERRADO") {
-          throw new Error(`El periodo de 24 horas para este examen ya cerró (${meta.cierre} hrs).`);
-        }
+        if (meta.estadoHorario === "PROXIMAMENTE") throw new Error(`Este examen aún no abre. Apertura: ${meta.apertura} hrs.`);
+        if (meta.estadoHorario === "CERRADO") throw new Error(`El periodo para este examen ya cerró (${meta.cierre} hrs).`);
 
-        if (meta.colorPrimario) {
-          document.documentElement.style.setProperty("--primary", meta.colorPrimario);
-        }
+        if (meta.colorPrimario) document.documentElement.style.setProperty("--primary", meta.colorPrimario);
         document.getElementById("hdr-title").textContent = `${meta.materia} (${meta.grupo})`;
         document.getElementById("hdr-sub").textContent = meta.profesor;
         document.getElementById("cal-materia").textContent = `${meta.materia} — ${meta.grupo}`;
         document.getElementById("cal-info").textContent = `Docente: ${meta.profesor} | Duración: ${meta.duracionMinutos} min | Reactivos: ${meta.totalReactivos}`;
 
-        alumnoData.matricula = matricula;
-        alumnoData.password = clave;
-
+        alumno = { matricula, password: clave };
         document.getElementById("step-login").classList.add("hidden");
         document.getElementById("step-calibration").classList.remove("hidden");
-
       } catch (err) {
         errBox.textContent = err.message;
         errBox.classList.remove("hidden");
       } finally {
         btn.disabled = false;
-        btn.textContent = "Verificar Acceso";
+        btn.textContent = "Verificar acceso";
       }
     });
 
     // =========================================================================
-    // PASO 2: CONSENTIMIENTO, CÁMARA Y CALIBRACIÓN DE DECIBELES
+    // PASO 2: CONSENTIMIENTO, CÁMARA Y RUIDO
     // =========================================================================
-    document.getElementById("chk-consent").addEventListener("change", (e) => {
+    document.getElementById("chk-consent").addEventListener("change", e => {
       document.getElementById("btn-activate-devices").disabled = !e.target.checked;
     });
+
+    async function iniciarHardware() {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 12, max: 15 }, facingMode: "user" },
+        audio: { echoCancellation: true, noiseSuppression: false }
+      });
+      document.getElementById("hardware-box").classList.remove("hidden");
+      document.getElementById("setup-video").srcObject = stream;
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const src = audioCtx.createMediaStreamSource(stream);
+      analyser = audioCtx.createAnalyser();
+      analyser.fftSize = 256;
+      src.connect(analyser);
+    }
 
     document.getElementById("btn-activate-devices").addEventListener("click", async () => {
       const errBox = document.getElementById("cal-error");
       const btn = document.getElementById("btn-activate-devices");
       errBox.classList.add("hidden");
       btn.disabled = true;
-      btn.textContent = "Solicitando permisos de cámara y micrófono...";
-
       try {
-        mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: { width: { ideal: 320 }, height: { ideal: 240 }, frameRate: { ideal: 12, max: 15 }, facingMode: "user" },
-          audio: { echoCancellation: true, noiseSuppression: false }
-        });
-
-        document.getElementById("hardware-box").classList.remove("hidden");
-        const setupVid = document.getElementById("setup-video");
-        setupVid.srcObject = mediaStream;
-
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        const source = audioCtx.createMediaStreamSource(mediaStream);
-        analyser = audioCtx.createAnalyser();
-        analyser.fftSize = 256;
-        source.connect(analyser);
-
+        if (!stream) {
+          btn.textContent = "Solicitando permisos...";
+          await iniciarHardware();
+        }
+        btn.textContent = "Midiendo ruido...";
         await medirRuidoInicial();
-
       } catch (err) {
-        errBox.textContent = "Es obligatorio permitir el acceso a la cámara y micrófono para presentar el examen. Revisa los permisos de tu navegador.";
+        errBox.textContent = "Es obligatorio permitir cámara y micrófono para presentar el examen. Revisa los permisos del navegador.";
         errBox.classList.remove("hidden");
+        btn.textContent = "Reintentar activar cámara y micrófono";
+      } finally {
         btn.disabled = false;
-        btn.textContent = "1. Reintentar Activar Cámara y Micrófono";
       }
     });
 
-    function getCurrentAudioLevel() {
-      if (!analyser) return 0;
-      const dataArray = new Uint8Array(analyser.frequencyBinCount);
-      analyser.getByteFrequencyData(dataArray);
-      let sum = 0;
-      for (let i = 0; i < dataArray.length; i++) sum += dataArray[i];
-      return sum / dataArray.length;
-    }
-
     function medirRuidoInicial() {
-      return new Promise((resolve) => {
-        const statusEl = document.getElementById("noise-status");
-        const progEl = document.getElementById("noise-progress");
+      return new Promise(resolve => {
+        const st = document.getElementById("noise-status");
+        const pr = document.getElementById("noise-progress");
         const btnAct = document.getElementById("btn-activate-devices");
-        const btnStart = document.getElementById("btn-start-exam");
+        const btnNext = document.getElementById("btn-to-instructions");
+        st.className = "alert alert-info";
+        st.textContent = "Midiendo ruido ambiental (5 s). Mantén silencio.";
+        btnNext.classList.add("hidden");
 
-        statusEl.className = "alert alert-info";
-        statusEl.textContent = "Midiendo ruido ambiental (5 segundos)... Mantén silencio en tu habitación.";
-        btnStart.classList.add("hidden");
-
-        let elapsed = 0;
-        let samples = [];
-
-        const interval = setInterval(() => {
-          elapsed += 250;
-          progEl.style.width = `${Math.min(100, (elapsed / 5000) * 100)}%`;
-          samples.push(getCurrentAudioLevel());
-
-          if (elapsed >= 5000) {
-            clearInterval(interval);
-            const avgNoise = samples.reduce((a, b) => a + b, 0) / samples.length;
-
-            if (avgNoise > 58) {
-              statusEl.className = "alert alert-danger";
-              statusEl.textContent = "⚠️ Ruido ambiental elevado detectado. Por favor, muévete a un espacio más silencioso y vuelve a verificar.";
-              btnAct.disabled = false;
-              btnAct.textContent = "Volver a Medir Ruido Ambiental";
+        let t = 0;
+        const muestras = [];
+        const id = setInterval(() => {
+          t += 250;
+          pr.style.width = `${Math.min(100, (t / 5000) * 100)}%`;
+          muestras.push(nivelAudio());
+          if (t >= 5000) {
+            clearInterval(id);
+            const prom = muestras.reduce((a, b) => a + b, 0) / muestras.length;
+            if (prom > 58) {
+              st.className = "alert alert-danger";
+              st.textContent = "⚠️ Ruido elevado. Muévete a un espacio más silencioso y vuelve a medir.";
+              btnAct.textContent = "Volver a medir ruido ambiental";
             } else {
-              statusEl.className = "alert alert-info";
-              statusEl.textContent = "✅ Entorno silencioso y cámara verificados correctamente.";
+              st.className = "alert alert-info";
+              st.textContent = "✅ Entorno silencioso y cámara verificados.";
               btnAct.classList.add("hidden");
-              btnStart.classList.remove("hidden");
+              btnNext.classList.remove("hidden");
             }
             resolve();
           }
@@ -805,83 +684,100 @@
       });
     }
 
+    document.getElementById("btn-to-instructions").addEventListener("click", () => {
+      document.getElementById("step-calibration").classList.add("hidden");
+      document.getElementById("step-instructions").classList.remove("hidden");
+    });
+
     // =========================================================================
-    // PASO 3: INICIAR SESIÓN EN SERVIDOR + PANEO INICIAL 360° + EXAMEN
+    // PASO 3: INSTRUCCIONES Y ARRANQUE
     // =========================================================================
-    document.getElementById("btn-start-exam").addEventListener("click", async () => {
-      const btn = document.getElementById("btn-start-exam");
-      const errBox = document.getElementById("cal-error");
+    const chkInstr = [...document.querySelectorAll(".chk-instr")];
+    chkInstr.forEach(c => c.addEventListener("change", () => {
+      document.getElementById("btn-iniciar").disabled = !chkInstr.every(x => x.checked);
+    }));
+
+    document.getElementById("btn-iniciar").addEventListener("click", iniciarExamenCompleto);
+
+    async function iniciarExamenCompleto() {
+      const btn = document.getElementById("btn-iniciar");
+      const errBox = document.getElementById("inst-error");
       errBox.classList.add("hidden");
       btn.disabled = true;
-      btn.textContent = "Iniciando sesión segura en servidor...";
+      btn.textContent = "Iniciando sesión segura...";
 
       try {
         await enterFullscreen();
 
-        const soportaVideoRec = (typeof MediaRecorder !== "undefined") &&
-          (MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") || MediaRecorder.isTypeSupported("video/webm") || MediaRecorder.isTypeSupported("video/mp4"));
-
-        recordingMode = soportaVideoRec ? "Video+Audio (Bloques 10m)" : "Respaldo Audio+Fotos30s";
+        recordingSupported = typeof MediaRecorder !== "undefined" &&
+          (MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") || MediaRecorder.isTypeSupported("video/webm"));
+        recordingMode = recordingSupported ? "Video+Audio (bloques de 5 preguntas)" : "Respaldo Fotos30s";
 
         const initRes = await postGAS(materiaEndpoint, {
           action: "iniciar_examen",
-          matricula: alumnoData.matricula,
-          password: alumnoData.password,
+          matricula: alumno.matricula,
+          password: alumno.password,
           userAgent: navigator.userAgent,
           modoGrabacion: recordingMode
         });
+        if (initRes.status !== "ok") throw new Error(initRes.message || "No se pudo iniciar el examen.");
 
-        if (initRes.status !== "ok") {
-          throw new Error(initRes.message || "No se pudo iniciar el examen.");
-        }
+        alumno = { ...alumno, ...initRes.alumno };
+        examCfg = initRes.config;
+        preguntas = initRes.preguntas;
+        maxFaltas = examCfg.maxAdvertencias || 3;
+        secondsLeft = (examCfg.duracionMinutos || 60) * 60;
 
-        alumnoData = { ...alumnoData, ...initRes.alumno };
-        examConfig = initRes.config;
-        preguntasList = initRes.preguntas;
-        maxAdvertencias = examConfig.maxAdvertencias || 3;
-        totalSecondsLeft = (examConfig.duracionMinutos || 60) * 60;
+        // Paneo aleatorio entre la pregunta 2 y la última (el 1 ya tiene paneo inicial)
+        const total = preguntas.length;
+        panAleatorioQ = total >= 2 ? Math.floor(Math.random() * (total - 1)) + 2 : 0;
 
-        iniciarGrabacionEvidencia(soportaVideoRec);
+        startRecording();
+        await ejecutarPaneo("Verificación inicial de entorno", 8);
+        await cortarYSubir("paneo_inicial", true);
 
-        await ejecutarPaneo360("Verificación Inicial de Entorno (360°)", 8);
-
-        iniciarInterfazExamen();
-
+        document.getElementById("step-instructions").classList.add("hidden");
+        document.getElementById("step-exam").classList.remove("hidden");
+        montarHUD();
+        activarVigilancia();
+        examActive = true;
+        iniciarCronometro();
+        await mostrarPregunta(0);
       } catch (err) {
         errBox.textContent = err.message;
         errBox.classList.remove("hidden");
         btn.disabled = false;
-        btn.textContent = "2. Iniciar Paneo 360° y Comenzar Examen";
+        btn.textContent = "Iniciar examen (realiza paneo inicial)";
       }
-    });
+    }
 
-    function ejecutarPaneo360(titulo, segundos) {
-      return new Promise((resolve) => {
-        examPausedForPan = true;
+    // =========================================================================
+    // PANEO 360°
+    // =========================================================================
+    function ejecutarPaneo(titulo, segundos) {
+      return new Promise(resolve => {
+        pausedForPan = true;
         const modal = document.getElementById("modal-pan");
-        const panVid = document.getElementById("pan-video");
+        const vid = document.getElementById("pan-video");
         const prog = document.getElementById("pan-progress");
         const txt = document.getElementById("pan-timer-txt");
-
         document.getElementById("pan-title").textContent = `🎥 ${titulo}`;
-        panVid.srcObject = mediaStream;
+        vid.srcObject = stream;
         modal.style.display = "flex";
-        logEvent(`Inició paneo ambiental: ${titulo}`);
+        logEvent(`Inició paneo: ${titulo}`);
 
-        let elapsed = 0;
-        const totalMs = segundos * 1000;
-        const step = setInterval(() => {
-          elapsed += 200;
-          const pct = Math.min(100, (elapsed / totalMs) * 100);
-          prog.style.width = `${pct}%`;
-          txt.textContent = `Grabando entorno... ${Math.ceil((totalMs - elapsed) / 1000)}s`;
-
-          if (elapsed >= totalMs) {
-            clearInterval(step);
+        let t = 0;
+        const total = segundos * 1000;
+        const id = setInterval(() => {
+          t += 200;
+          prog.style.width = `${Math.min(100, (t / total) * 100)}%`;
+          txt.textContent = `Grabando entorno... ${Math.ceil((total - t) / 1000)} s`;
+          if (t >= total) {
+            clearInterval(id);
             modal.style.display = "none";
-            panVid.srcObject = null;
-            examPausedForPan = false;
-            logEvent(`Completó paneo ambiental: ${titulo}`);
+            vid.srcObject = null;
+            pausedForPan = false;
+            logEvent(`Completó paneo: ${titulo}`);
             resolve();
           }
         }, 200);
@@ -889,451 +785,514 @@
     }
 
     // =========================================================================
-    // GRABACIÓN LIGERAMENTE FRAGMENTADA + RESPALDO HARDWARE ANTIGUO
+    // GRABACIÓN POR BLOQUES Y SUBIDA CON REINTENTO
     // =========================================================================
-    function iniciarGrabacionEvidencia(soportaVideoRec) {
-      if (soportaVideoRec) {
+    function startRecording() {
+      if (!recordingSupported) { iniciarFallbackFotos(); return; }
+      const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") ? "video/webm;codecs=vp8,opus" : "video/webm";
+      recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 180000, audioBitsPerSecond: 32000 });
+      chunks = [];
+      recorder.ondataavailable = e => { if (e.data && e.data.size > 0) chunks.push(e.data); };
+      recorder.start(5000);
+    }
+
+    // Detiene la grabación actual y devuelve el blob del bloque
+    function detenerYCapturar() {
+      return new Promise(resolve => {
+        if (!recorder || recorder.state === "inactive") { resolve(null); return; }
+        const rec = recorder;
+        rec.onstop = () => {
+          const blob = new Blob(chunks, { type: rec.mimeType || "video/webm" });
+          chunks = [];
+          resolve(blob);
+        };
+        rec.stop();
+      });
+    }
+
+    // Corta el bloque, reinicia la grabación y sube en segundo plano
+    async function cortarYSubir(nombreBase, reiniciar) {
+      const blob = await detenerYCapturar();
+      if (reiniciar && recordingSupported && examActive) startRecording();
+      if (blob && blob.size > 0) {
+        logEvent(`Bloque cortado: ${nombreBase}`);
+        inflight.push(subirConReintento(blob, nombreBase));
+      }
+      return blob;
+    }
+
+    async function subirConReintento(blob, baseName) {
+      const ext = blob.type.includes("png") ? "png" : blob.type.includes("jpeg") ? "jpg" : "webm";
+      const nombreArchivo = `${alumno.matricula}_${baseName}.${ext}`;
+
+      for (let intento = 1; intento <= 3; intento++) {
         try {
-          const options = MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus")
-            ? { mimeType: "video/webm;codecs=vp8,opus", videoBitsPerSecond: 180000, audioBitsPerSecond: 32000 }
-            : { videoBitsPerSecond: 180000 };
-
-          mediaRecorder = new MediaRecorder(mediaStream, options);
-          recordedChunks = [];
-
-          mediaRecorder.ondataavailable = (e) => {
-            if (e.data && e.data.size > 0) {
-              recordedChunks.push(e.data);
-            }
-          };
-
-          mediaRecorder.start(2000);
-
-          chunkInterval = setInterval(() => {
-            if (mediaRecorder && mediaRecorder.state === "recording") {
-              subirBloqueActual(false);
-            }
-          }, 600000);
-
-          return;
-        } catch (e) {
-          recordingMode = "Respaldo Fotos30s (Fallback)";
+          const b64 = await blobToBase64(blob);
+          const res = await postGAS(materiaEndpoint, {
+            action: "subir_evidencia",
+            matricula: alumno.matricula,
+            studentFolderId: alumno.studentFolderId,
+            fileName: nombreArchivo,
+            mimeType: blob.type,
+            fileData: b64
+          });
+          if (res.status === "ok") {
+            subidas++;
+            actualizarEstadoEvidencia();
+            return true;
+          }
+          console.warn("Servidor rechazó archivo:", res.message);
+        } catch (err) {
+          console.warn(`Intento ${intento} de subida falló:`, err);
         }
+        await sleep(2000 * intento);
       }
 
-      fallbackPhotoInterval = setInterval(() => {
-        capturarYSubirFotoRespaldo();
-      }, 30000);
+      pendientes.push({ blob, baseName });
+      actualizarEstadoEvidencia();
+      return false;
     }
 
-    async function subirBloqueActual(esFinal) {
-      if (!mediaRecorder) return;
-
-      return new Promise((resolve) => {
-        const mime = mediaRecorder.mimeType || "video/webm";
-        const parte = chunkCounter++;
-
-        mediaRecorder.onstop = async () => {
-          const blob = new Blob(recordedChunks, { type: mime });
-          recordedChunks = [];
-
-          if (!esFinal && mediaStream && mediaStream.active) {
-            mediaRecorder.start(2000);
-          }
-
-          if (blob.size > 0) {
-            const base64 = await blobToBase64(blob);
-            const ext = mime.includes("mp4") ? "mp4" : "webm";
-            await postGAS(materiaEndpoint, {
-              action: "subir_evidencia",
-              matricula: alumnoData.matricula,
-              studentFolderId: alumnoData.studentFolderId,
-              fileName: `${alumnoData.matricula}_parte${parte}.${ext}`,
-              mimeType: mime,
-              fileData: base64
-            }).catch(() => {});
-          }
-          resolve();
-        };
-
-        if (mediaRecorder.state !== "inactive") {
-          mediaRecorder.stop();
-        } else {
-          resolve();
-        }
-      });
+    async function reintentarPendientes() {
+      const lista = pendientes.splice(0);
+      for (const p of lista) {
+        await subirConReintento(p.blob, p.baseName);
+      }
     }
 
-    async function capturarYSubirFotoRespaldo() {
-      const video = document.getElementById("pip-video");
-      if (!video || video.readyState < 2) return;
-      const canvas = document.createElement("canvas");
-      canvas.width = 320;
-      canvas.height = 240;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const dataUrl = canvas.toDataURL("image/jpeg", 0.65);
-
-      await postGAS(materiaEndpoint, {
-        action: "subir_evidencia",
-        matricula: alumnoData.matricula,
-        studentFolderId: alumnoData.studentFolderId,
-        fileName: `${alumnoData.matricula}_snap_${Date.now()}.jpg`,
-        mimeType: "image/jpeg",
-        fileData: dataUrl
-      }).catch(() => {});
+    // Respaldo para navegadores sin MediaRecorder: una foto cada 30 s
+    function iniciarFallbackFotos() {
+      fallbackId = setInterval(capturarFoto, 30000);
     }
 
-    function blobToBase64(blob) {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(blob);
-      });
+    async function capturarFoto() {
+      const v = document.getElementById("pip-video");
+      if (!v || v.readyState < 2) return;
+      const c = document.createElement("canvas");
+      c.width = 320; c.height = 240;
+      c.getContext("2d").drawImage(v, 0, 0, 320, 240);
+      const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.65));
+      if (blob) inflight.push(subirConReintento(blob, `foto_${Date.now()}`));
     }
 
     // =========================================================================
-    // INTERFAZ DEL EXAMEN, MARCA DE AGUA Y VIGILANCIA CONTINUA
+    // INTERFAZ DEL EXAMEN
     // =========================================================================
-    function iniciarInterfazExamen() {
-      document.getElementById("step-calibration").classList.add("hidden");
-      document.getElementById("step-exam").classList.remove("hidden");
+    function montarHUD() {
+      document.getElementById("pip-video").srcObject = stream;
+      document.getElementById("proctor-pip").style.display = "block";
+      document.getElementById("pip-mat").textContent = alumno.matricula;
+      document.getElementById("hud-alumno").textContent = `${alumno.nombre} (${alumno.matricula})`;
+      document.getElementById("hud-materia").textContent = `${examCfg.materia} — ${examCfg.grupo}`;
+      document.getElementById("hud-strikes").textContent = `Advertencias: 0 / ${maxFaltas}`;
+      actualizarReloj();
+      document.getElementById("watermark").style.display = "block";
+      moverMarcaAgua();
+      setInterval(moverMarcaAgua, 7000);
+      actualizarEstadoEvidencia();
+    }
 
-      const pip = document.getElementById("proctor-pip");
-      const pipVid = document.getElementById("pip-video");
-      pipVid.srcObject = mediaStream;
-      pip.style.display = "block";
-      document.getElementById("pip-mat").textContent = alumnoData.matricula;
+    function moverMarcaAgua() {
+      const wm = document.getElementById("watermark");
+      wm.textContent = `${alumno.nombre} | ${alumno.matricula} | ${examCfg.materia} | ${new Date().toLocaleTimeString("es-MX")}`;
+      wm.style.top = `${Math.floor(Math.random() * 65) + 15}%`;
+      wm.style.left = `${Math.floor(Math.random() * 45) + 5}%`;
+    }
 
-      document.getElementById("hud-alumno").textContent = `${alumnoData.nombre} (${alumnoData.matricula})`;
-      document.getElementById("hud-materia").textContent = `${examConfig.materia} — ${examConfig.grupo}`;
-
-      renderPreguntas();
-      iniciarMarcaDeAgua();
-      iniciarVigilanciaSeguridad();
-
-      examActive = true;
-
-      timerInterval = setInterval(() => {
-        if (!examActive || examPausedForPan) return;
-        totalSecondsLeft--;
-        actualizarRelojHUD();
-
-        if (totalSecondsLeft <= 0) {
-          logEvent("Tiempo global agotado (00:00). Envío automático.");
-          cerrarYEnviarExamen(false);
+    function iniciarCronometro() {
+      timerId = setInterval(() => {
+        if (!examActive || pausedForPan) return;
+        secondsLeft--;
+        actualizarReloj();
+        if (secondsLeft <= 0) {
+          logEvent("Tiempo agotado. Envío automático.");
+          finalizarExamen(false);
         }
       }, 1000);
-
-      const randomDelayMs = (Math.floor(Math.random() * 26) + 12) * 60 * 1000;
-      randomPanTimeout = setTimeout(() => {
-        if (examActive) {
-          ejecutarPaneo360("Verificación Aleatoria de Entorno", 8);
-        }
-      }, randomDelayMs);
     }
 
-    function renderPreguntas() {
-      const container = document.getElementById("questions-container");
-      container.innerHTML = "";
-      const letrasVisuales = ["A", "B", "C", "D"];
-
-      preguntasList.forEach((preg, idx) => {
-        const card = document.createElement("div");
-        card.className = "question-card";
-
-        const titleDiv = document.createElement("div");
-        titleDiv.className = "q-title";
-        titleDiv.textContent = `${idx + 1}. ${preg.pregunta}`;
-        card.appendChild(titleDiv);
-
-        const optsWrapper = document.createElement("div");
-        preg.opciones.forEach((op, opIdx) => {
-          const letraMostrada = letrasVisuales[opIdx] || "";
-          const label = document.createElement("label");
-          label.className = "option-label";
-
-          const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.name = `preg_${preg.id}`;
-          radio.value = op.letraOriginal;
-          radio.addEventListener("change", () => {
-            respuestasUsuario[preg.id] = op.letraOriginal;
-          });
-
-          const span = document.createElement("span");
-          span.innerHTML = `<strong>${letraMostrada})</strong> ${escapeHTML(op.texto)}`;
-
-          label.appendChild(radio);
-          label.appendChild(span);
-          optsWrapper.appendChild(label);
-        });
-
-        card.appendChild(optsWrapper);
-        container.appendChild(card);
-      });
-    }
-
-    function actualizarRelojHUD() {
-      const mins = Math.floor(Math.max(0, totalSecondsLeft) / 60);
-      const secs = Math.max(0, totalSecondsLeft) % 60;
+    function actualizarReloj() {
+      const s = Math.max(0, secondsLeft);
       const el = document.getElementById("hud-timer");
-      el.textContent = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
-      if (totalSecondsLeft <= 300) {
+      el.textContent = `${pad(Math.floor(s / 60))}:${pad(s % 60)}`;
+      if (s <= 300) {
         el.style.color = "var(--danger)";
         el.style.background = "#FEF2F2";
       }
     }
 
-    function iniciarMarcaDeAgua() {
-      const wm = document.getElementById("watermark");
-      wm.style.display = "block";
+    async function mostrarPregunta(idx) {
+      qIndex = idx;
+      if (!panAleatorioHecho && panAleatorioQ && idx + 1 === panAleatorioQ) {
+        panAleatorioHecho = true;
+        logEvent(`Paneo aleatorio antes de la pregunta ${panAleatorioQ}`);
+        await ejecutarPaneo("Verificación aleatoria de entorno", 8);
+      }
+      renderPregunta();
+    }
 
-      const moverWM = () => {
-        const hora = new Date().toLocaleTimeString("es-MX");
-        wm.textContent = `${alumnoData.nombre} | ${alumnoData.matricula} | ${examConfig.materia} | ${hora}`;
-        wm.style.top = `${Math.floor(Math.random() * 65) + 15}%`;
-        wm.style.left = `${Math.floor(Math.random() * 45) + 5}%`;
-      };
-      moverWM();
-      watermarkInterval = setInterval(moverWM, 7000);
+    function renderPregunta() {
+      const p = preguntas[qIndex];
+      const total = preguntas.length;
+      document.getElementById("q-progreso").textContent = `Pregunta ${qIndex + 1} de ${total}`;
+      document.getElementById("q-barra").style.width = `${(qIndex / total) * 100}%`;
+
+      const cont = document.getElementById("question-container");
+      cont.innerHTML = "";
+
+      const card = document.createElement("div");
+      card.className = "question-card";
+
+      const titulo = document.createElement("div");
+      titulo.className = "q-title";
+      titulo.textContent = `${qIndex + 1}. ${p.pregunta}`;
+      card.appendChild(titulo);
+
+      const letras = ["A", "B", "C", "D"];
+      p.opciones.forEach((op, i) => {
+        const lab = document.createElement("label");
+        lab.className = "option-label";
+
+        const inp = document.createElement("input");
+        inp.type = "radio";
+        inp.name = "respuesta";
+        inp.value = op.letraOriginal;
+        inp.addEventListener("change", () => { respuestas[p.id] = op.letraOriginal; });
+
+        const span = document.createElement("span");
+        const strong = document.createElement("strong");
+        strong.textContent = `${letras[i]})`;
+        span.appendChild(strong);
+        span.appendChild(document.createTextNode(" " + op.texto));
+
+        lab.appendChild(inp);
+        lab.appendChild(span);
+        card.appendChild(lab);
+      });
+
+      cont.appendChild(card);
+      document.getElementById("btn-siguiente").textContent =
+        qIndex + 1 === total ? "Finalizar y enviar examen" : "Siguiente pregunta";
+    }
+
+    document.getElementById("btn-siguiente").addEventListener("click", async () => {
+      if (!examActive || finalizando) return;
+      const p = preguntas[qIndex];
+      const total = preguntas.length;
+
+      if (!respuestas[p.id] && !confirm("No elegiste respuesta en esta pregunta. ¿Continuar sin responderla?")) return;
+
+      if (qIndex + 1 === total) {
+        const n = Object.keys(respuestas).length;
+        if (!confirm(`Respondiste ${n} de ${total} preguntas. ¿Confirmas el envío final?`)) return;
+        await finalizarExamen(false);
+        return;
+      }
+
+      // Cada 5 preguntas se corta y sube el bloque de video
+      if ((qIndex + 1) % TAM_BLOQUE === 0) {
+        await cerrarBloqueDePreguntas();
+      }
+      await mostrarPregunta(qIndex + 1);
+    });
+
+    async function cerrarBloqueDePreguntas() {
+      const desde = bloqueInicio + 1;
+      const hasta = qIndex + 1;
+      await cortarYSubir(`bloque_preg${pad(desde)}-${pad(hasta)}`, true);
+      bloqueInicio = hasta;
     }
 
     // =========================================================================
-    // DETECCIÓN DE INFRACCIONES, PANTALLA COMPLETA, RUIDO Y CÁMARA TAPADA
+    // VIGILANCIA
     // =========================================================================
-    function iniciarVigilanciaSeguridad() {
+    function activarVigilancia() {
       document.addEventListener("contextmenu", e => { if (examActive) e.preventDefault(); });
       document.addEventListener("copy", e => { if (examActive) { e.preventDefault(); registrarFalta("Intento de copiar texto"); } });
       document.addEventListener("paste", e => { if (examActive) { e.preventDefault(); registrarFalta("Intento de pegar texto"); } });
       document.addEventListener("keydown", e => {
         if (!examActive) return;
-        if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(e.key.toUpperCase())) || (e.ctrlKey && ["U", "S", "P"].includes(e.key.toUpperCase()))) {
+        const k = e.key.toUpperCase();
+        if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(k)) || (e.ctrlKey && ["U", "S", "P"].includes(k))) {
           e.preventDefault();
-          registrarFalta("Uso de atajo de teclado restringido");
+          registrarFalta("Atajo de teclado restringido");
         }
       });
-
       document.addEventListener("visibilitychange", () => {
-        if (examActive && document.hidden) {
-          registrarFalta("Cambio de pestaña o aplicación detectado");
-        }
+        if (examActive && document.hidden) registrarFalta("Cambio de pestaña o aplicación");
       });
-
       document.addEventListener("fullscreenchange", () => {
-        if (examActive && !document.fullscreenElement) {
-          registrarFalta("Salida del modo Pantalla Completa");
-        }
+        if (examActive && !document.fullscreenElement) registrarFalta("Salida de pantalla completa");
       });
 
-      // Contadores de ticks consecutivos (cada tick = 2.5 s)
-      let ticksSinTrack = 0;
-      let ticksTapado = 0;
-      let faltaTrackRegistrada = false;
-      let faltaTapadoRegistrada = false;
-      let ruidoSostenido = 0;
+      let ticksSinTrack = 0, ticksTapado = 0, faltaTrack = false, faltaTapado = false, ruido = 0;
+      monitorId = setInterval(() => {
+        if (!examActive || pausedForPan) return;
 
-      audioMonitorInterval = setInterval(() => {
-        if (!examActive) return;
-
-        // 1. Verificar tracks activos (falta solo si persiste ~7.5 s)
-        const vTrack = mediaStream ? mediaStream.getVideoTracks()[0] : null;
-        const aTrack = mediaStream ? mediaStream.getAudioTracks()[0] : null;
-        if (!vTrack || vTrack.readyState !== "live" || !vTrack.enabled || !aTrack || aTrack.readyState !== "live") {
+        const v = stream ? stream.getVideoTracks()[0] : null;
+        const a = stream ? stream.getAudioTracks()[0] : null;
+        if (!v || v.readyState !== "live" || !v.enabled || !a || a.readyState !== "live") {
           ticksSinTrack++;
-          if (ticksSinTrack >= 3 && !faltaTrackRegistrada) {
-            faltaTrackRegistrada = true;
-            registrarFalta("Cámara o micrófono desconectado/deshabilitado");
+          if (ticksSinTrack >= 3 && !faltaTrack) {
+            faltaTrack = true;
+            registrarFalta("Cámara o micrófono desconectados");
           }
           return;
-        } else {
-          ticksSinTrack = 0;
-          faltaTrackRegistrada = false;
         }
+        ticksSinTrack = 0;
+        faltaTrack = false;
 
-        // 2. Verificar lente tapado (falta solo si persiste ~10 s, y una sola vez por episodio)
-        if (verificarLenteTapado()) {
+        if (lenteTapado()) {
           ticksTapado++;
-          if (ticksTapado >= 4 && !faltaTapadoRegistrada) {
-            faltaTapadoRegistrada = true;
-            registrarFalta("Cámara obstruida o sin iluminación visible");
+          if (ticksTapado >= 4 && !faltaTapado) {
+            faltaTapado = true;
+            registrarFalta("Cámara obstruida o sin iluminación");
           }
           return;
-        } else {
-          ticksTapado = 0;
-          faltaTapadoRegistrada = false;
         }
+        ticksTapado = 0;
+        faltaTapado = false;
 
-        // 3. Medidor de decibeles en HUD y alerta silenciosa de voz/ruido
-        const lvl = getCurrentAudioLevel();
-        const dbBar = document.getElementById("pip-db");
-        const pct = Math.min(100, (lvl / 120) * 100);
-        dbBar.style.width = `${pct}%`;
-        dbBar.style.background = lvl > 65 ? "#EF4444" : "#10B981";
-
+        const lvl = nivelAudio();
+        const bar = document.getElementById("pip-db");
+        bar.style.width = `${Math.min(100, (lvl / 120) * 100)}%`;
+        bar.style.background = lvl > 65 ? "#EF4444" : "#10B981";
         if (lvl > 68) {
-          ruidoSostenido++;
-          if (ruidoSostenido === 2) {
+          ruido++;
+          if (ruido === 2) {
             alertasAudio++;
-            logEvent(`Alerta de audio: Nivel de voz o ruido elevado detectado (nivel ${Math.round(lvl)}).`);
+            logEvent(`Alerta de audio (nivel ${Math.round(lvl)}).`);
           }
         } else {
-          ruidoSostenido = 0;
+          ruido = 0;
         }
       }, 2500);
     }
 
-    function verificarLenteTapado() {
-      const video = document.getElementById("pip-video");
-      if (!video || video.readyState < 2) return false;
-      const canvas = document.createElement("canvas");
-      canvas.width = 32;
-      canvas.height = 24;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(video, 0, 0, 32, 24);
-      const data = ctx.getImageData(0, 0, 32, 24).data;
-      let totalBrillo = 0;
-      for (let i = 0; i < data.length; i += 4) {
-        totalBrillo += (data[i] + data[i + 1] + data[i + 2]) / 3;
-      }
-      const promedio = totalBrillo / (data.length / 4);
-      return promedio < 6;
-    }
-
     function registrarFalta(motivo) {
-      if (!examActive) return;
-      const now = Date.now();
-      if (now - lastViolationTime < 3000) return;
-      lastViolationTime = now;
+      if (!examActive || pausedForPan) return;
+      const ahora = Date.now();
+      if (ahora - lastViolation < 3000) return;
+      lastViolation = ahora;
 
-      faltasCount++;
-      logEvent(`FALTA ${faltasCount}/${maxAdvertencias}: ${motivo}`);
-      document.getElementById("hud-strikes").textContent = `Advertencias: ${faltasCount} / ${maxAdvertencias}`;
+      faltas++;
+      logEvent(`FALTA ${faltas}/${maxFaltas}: ${motivo}`);
+      document.getElementById("hud-strikes").textContent = `Advertencias: ${faltas} / ${maxFaltas}`;
 
-      if (faltasCount >= maxAdvertencias) {
-        warningModalOpen = false;
-        document.getElementById("modal-warning").style.display = "none";
-        cerrarYEnviarExamen(true);
+      if (faltas >= maxFaltas) {
+        finalizarExamen(true);
         return;
       }
-
-      document.getElementById("warn-msg").textContent = `Se detectó una acción no permitida: ${motivo}. Este evento quedó registrado en video y bitácora.`;
-      document.getElementById("warn-counter").textContent = `Advertencia ${faltasCount} de ${maxAdvertencias}. A la tercera falta el examen se cerrará automáticamente.`;
-
-      if (!warningModalOpen) {
-        warningModalOpen = true;
-        document.getElementById("modal-warning").style.display = "flex";
-      }
+      document.getElementById("warn-msg").textContent = `Acción no permitida: ${motivo}. Quedó registrada en video y bitácora.`;
+      document.getElementById("warn-counter").textContent = `Advertencia ${faltas} de ${maxFaltas}. A la tercera el examen se cerrará.`;
+      document.getElementById("modal-warning").style.display = "flex";
     }
 
     document.getElementById("btn-resume-fullscreen").addEventListener("click", async () => {
       await enterFullscreen();
-      warningModalOpen = false;
       document.getElementById("modal-warning").style.display = "none";
     });
 
-    async function enterFullscreen() {
-      const el = document.documentElement;
-      if (!document.fullscreenElement && el.requestFullscreen) {
-        await el.requestFullscreen().catch(() => {});
-      }
-    }
-
     // =========================================================================
-    // PASO 4: ENVÍO FINAL Y CIERRE DE SESIÓN
+    // CIERRE DEL EXAMEN
     // =========================================================================
-    document.getElementById("btn-submit-exam").addEventListener("click", () => {
-      const respondidas = Object.keys(respuestasUsuario).length;
-      const total = preguntasList.length;
-      const msg = respondidas < total
-        ? `Has respondido ${respondidas} de ${total} preguntas. ¿Seguro que deseas enviar tu examen así?`
-        : "¿Confirmas que deseas finalizar y enviar tu examen ahora?";
-
-      if (confirm(msg)) {
-        cerrarYEnviarExamen(false);
-      }
-    });
-
-    async function cerrarYEnviarExamen(bloqueadoPorFaltas) {
-      if (!examActive) return;
+    async function finalizarExamen(bloqueadoPorFaltas) {
+      if (finalizando) return;
+      finalizando = true;
       examActive = false;
-
-      clearInterval(timerInterval);
-      clearInterval(chunkInterval);
-      clearInterval(fallbackPhotoInterval);
-      clearInterval(audioMonitorInterval);
-      clearInterval(watermarkInterval);
-      clearTimeout(randomPanTimeout);
-
-      const btnSubmit = document.getElementById("btn-submit-exam");
-      if (btnSubmit) {
-        btnSubmit.disabled = true;
-        btnSubmit.textContent = "Subiendo evidencia final y registrando examen...";
-      }
-
-      document.getElementById("questions-container").innerHTML = `
-        <div class="card" style="text-align:center;">
-          <h3>Guardando evidencia de video y cerrando sesión...</h3>
-          <p style="color:var(--muted);">No cierres esta ventana hasta recibir tu folio de confirmación.</p>
-        </div>
-      `;
-
-      if (mediaRecorder) {
-        await subirBloqueActual(true);
-      } else {
-        await capturarYSubirFotoRespaldo();
-      }
-
-      if (mediaStream) {
-        mediaStream.getTracks().forEach(t => t.stop());
-      }
-      document.getElementById("proctor-pip").style.display = "none";
-      document.getElementById("watermark").style.display = "none";
-
-      if (document.fullscreenElement && document.exitFullscreen) {
-        document.exitFullscreen().catch(() => {});
-      }
+      clearInterval(timerId);
+      clearInterval(monitorId);
+      clearInterval(fallbackId);
+      document.getElementById("modal-warning").style.display = "none";
 
       try {
-        const res = await postGAS(materiaEndpoint, {
-          action: "finalizar_examen",
-          matricula: alumnoData.matricula,
-          respuestas: respuestasUsuario,
-          bloqueadoPorFaltas: bloqueadoPorFaltas,
-          faltas: faltasCount,
-          alertasAudio: alertasAudio,
-          modoGrabacion: recordingMode,
-          bitacora: bitacoraEventos.join("\n")
-        });
+        // 1. Último bloque y subidas pendientes
+        setBusy(true, "Guardando el último bloque de video...");
+        const total = preguntas.length;
+        await cortarYSubir(`bloque_final_preg${pad(bloqueInicio + 1)}-${pad(total)}`, false);
+        await Promise.all(inflight);
 
-        document.getElementById("step-exam").classList.add("hidden");
-        document.getElementById("step-finish").classList.remove("hidden");
-
-        if (bloqueadoPorFaltas) {
-          document.getElementById("fin-title").textContent = "🚫 Examen Cerrado por Acumulación de Advertencias";
-          document.getElementById("fin-title").style.color = "var(--danger)";
-          document.getElementById("fin-desc").textContent = "Se alcanzó el límite máximo de infracciones permitidas. Tus respuestas parciales y la grabación de video fueron enviadas al profesor.";
-        } else {
-          document.getElementById("fin-desc").textContent = `Gracias, ${alumnoData.nombre}. Tu examen de ${examConfig.materia} y tu evidencia audiovisual quedaron registrados.`;
+        while (pendientes.length > 0) {
+          setBusy(true, `No se pudieron subir ${pendientes.length} archivo(s). Revisa tu conexión y reintenta.`, true);
+          await esperarReintento();
+          setBusy(true, "Reintentando subidas...");
+          await reintentarPendientes();
         }
 
-        document.getElementById("fin-folio").textContent = `FOLIO: ${res.folio || "REGISTRADO"} (${res.timestamp || ""})`;
+        apagarDispositivos();
 
+        // 2. Cierre en el servidor (reintenta si falla la red)
+        let res = null;
+        while (!res || res.status !== "ok") {
+          setBusy(true, "Cerrando examen en el servidor...");
+          try {
+            res = await postGAS(materiaEndpoint, {
+              action: "finalizar_examen",
+              matricula: alumno.matricula,
+              respuestas: respuestas,
+              bloqueadoPorFaltas: bloqueadoPorFaltas,
+              faltas: faltas,
+              alertasAudio: alertasAudio,
+              modoGrabacion: recordingMode,
+              bitacora: bitacora.join("\n")
+            });
+            if (res.status !== "ok") throw new Error(res.message || "Error del servidor");
+          } catch (err) {
+            res = null;
+            setBusy(true, `No se confirmó el cierre (${err.message}). Reintenta.`, true);
+            await esperarReintento();
+          }
+        }
+        resultadoFinal = res;
+
+        // 3. Comprobante PNG, subido a la carpeta del alumno
+        setBusy(true, "Generando tu comprobante...");
+        evidenciaFinal = await generarComprobantePNG({
+          nombre: alumno.nombre,
+          matricula: alumno.matricula,
+          materia: examCfg.materia,
+          grupo: examCfg.grupo,
+          folio: res.folio,
+          timestamp: res.timestamp,
+          aciertos: res.aciertos,
+          total: res.total || total,
+          estatus: res.estatus
+        });
+        await subirConReintento(evidenciaFinal, "comprobante_evaluacion");
+
+        setBusy(false);
+        mostrarFin(bloqueadoPorFaltas, res, total);
       } catch (err) {
-        document.getElementById("step-exam").classList.add("hidden");
-        document.getElementById("step-finish").classList.remove("hidden");
-        document.getElementById("fin-title").textContent = "⚠️ Envío con observación de red";
-        document.getElementById("fin-desc").textContent = "Hubo una intermitencia al confirmar el folio, pero tus bloques de evidencia fueron enviados. Toma captura de esta pantalla y avisa a tu profesor.";
+        setBusy(true, `Error inesperado: ${err.message}`);
       }
     }
 
-    function escapeHTML(str) {
-      return String(str)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
+    function generarComprobantePNG(d) {
+      const c = document.createElement("canvas");
+      c.width = 900;
+      c.height = 460;
+      const ctx = c.getContext("2d");
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, 900, 460);
+
+      ctx.fillStyle = "#059669";
+      ctx.font = "bold 34px Arial";
+      ctx.fillText("Evaluación registrada exitosamente", 50, 80);
+
+      ctx.fillStyle = "#374151";
+      ctx.font = "22px Arial";
+      ctx.fillText(`Alumno: ${d.nombre} (${d.matricula})`, 50, 135);
+      ctx.fillText(`Materia: ${d.materia} — ${d.grupo}`, 50, 170);
+      ctx.fillText(`Fecha y hora de cierre: ${d.timestamp}`, 50, 205);
+      ctx.fillText(`Respuestas correctas: ${d.aciertos ?? "—"} de ${d.total}`, 50, 240);
+
+      ctx.fillStyle = "#F3F4F6";
+      ctx.fillRect(50, 280, 800, 80);
+      ctx.fillStyle = "#111827";
+      ctx.font = "bold 28px Courier New";
+      ctx.fillText(`FOLIO: ${d.folio}`, 75, 332);
+
+      ctx.fillStyle = "#6B7280";
+      ctx.font = "18px Arial";
+      ctx.fillText("Guarda este comprobante. Tu profesor revisará las evidencias registradas.", 50, 405);
+
+      return new Promise(r => c.toBlob(r, "image/png"));
+    }
+
+    function mostrarFin(bloqueado, res, total) {
+      document.getElementById("step-exam").classList.add("hidden");
+      document.getElementById("step-finish").classList.remove("hidden");
+
+      const titulo = document.getElementById("fin-title");
+      if (bloqueado) {
+        titulo.textContent = "🚫 Examen cerrado por advertencias";
+        titulo.style.color = "var(--danger)";
+        document.getElementById("fin-desc").textContent = "Se alcanzó el límite de advertencias. Tus respuestas y evidencias fueron enviadas al profesor.";
+      } else {
+        titulo.textContent = "✅ Evaluación registrada exitosamente";
+        titulo.style.color = "var(--success)";
+        document.getElementById("fin-desc").textContent = `Gracias, ${alumno.nombre}. Tu examen de ${examCfg.materia} quedó registrado.`;
+      }
+
+      const aciertos = typeof res.aciertos === "number" ? res.aciertos : null;
+      document.getElementById("fin-score").textContent = aciertos !== null
+        ? `Respuestas correctas: ${aciertos} de ${res.total || total}`
+        : "Tu calificación fue registrada en el sistema.";
+
+      document.getElementById("fin-folio").textContent = `FOLIO: ${res.folio} (${res.timestamp})`;
+      document.getElementById("fin-evid").textContent = pendientes.length === 0
+        ? "Todas tus evidencias fueron enviadas correctamente."
+        : `Quedan ${pendientes.length} archivo(s) pendientes de envío. Avisa a tu profesor.`;
+
+      document.getElementById("btn-descargar").onclick = () =>
+        descargarEvidencia(evidenciaFinal, `comprobante_${alumno.matricula}.png`);
+      document.getElementById("btn-ver-imagen").onclick = () =>
+        mostrarImagenParaGuardar(URL.createObjectURL(evidenciaFinal));
+    }
+
+    // =========================================================================
+    // DESCARGA DEL COMPROBANTE (varios métodos, en orden)
+    // =========================================================================
+    async function descargarEvidencia(blob, nombre) {
+      const url = URL.createObjectURL(blob);
+      const metodos = [
+        // 1. Enlace con atributo download (escritorio, Android, Chrome, Edge, Firefox)
+        () => {
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = nombre;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          return true;
+        },
+        // 2. API antigua de Edge/IE
+        () => {
+          if (navigator.msSaveOrOpenBlob) {
+            navigator.msSaveOrOpenBlob(blob, nombre);
+            return true;
+          }
+          return false;
+        },
+        // 3. Abrir en pestaña nueva (iPhone / Safari)
+        () => !!window.open(url, "_blank"),
+        // 4. Mostrar la imagen para guardarla manteniendo presionada
+        () => { mostrarImagenParaGuardar(url); return true; }
+      ];
+
+      // Los navegadores no informan si la descarga se completó; solo se detectan errores.
+      for (const metodo of metodos) {
+        try {
+          if (metodo()) return true;
+        } catch (err) {
+          console.warn("Método de descarga falló, se prueba el siguiente:", err);
+        }
+      }
+      return false;
+    }
+
+    function mostrarImagenParaGuardar(url) {
+      const overlay = document.createElement("div");
+      overlay.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.92);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:3000;padding:16px;";
+
+      const txt = document.createElement("p");
+      txt.style.cssText = "color:#fff;text-align:center;";
+      txt.textContent = 'Mantén presionada la imagen y elige "Guardar imagen".';
+
+      const img = document.createElement("img");
+      img.src = url;
+      img.style.cssText = "max-width:100%;border-radius:8px;background:#fff;";
+
+      const cerrar = document.createElement("button");
+      cerrar.className = "btn";
+      cerrar.style.cssText = "margin-top:12px;width:auto;";
+      cerrar.textContent = "Cerrar";
+      cerrar.onclick = () => overlay.remove();
+
+      overlay.appendChild(txt);
+      overlay.appendChild(img);
+      overlay.appendChild(cerrar);
+      document.body.appendChild(overlay);
     }
   </script>
 </body>
