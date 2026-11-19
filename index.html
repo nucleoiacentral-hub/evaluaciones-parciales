@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Plataforma Integral de Evaluación Supervisada</title>
   <style>
     :root {
@@ -27,6 +27,14 @@
       overflow-x: hidden;
     }
     .hidden { display: none !important; }
+
+    /* Cortina visual anti-capturas al perder foco */
+    body.privacy-blur #step-exam {
+      filter: blur(18px);
+      pointer-events: none;
+      transition: filter 0.05s linear;
+    }
+
     header {
       background: var(--primary);
       color: #fff;
@@ -34,6 +42,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -41,6 +50,22 @@
     }
     header h1 { margin: 0; font-size: 1.15rem; font-weight: 600; }
     header .sub { font-size: 0.85rem; opacity: 0.9; }
+    .net-pill {
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(16, 185, 129, 0.22);
+      border: 1px solid rgba(16, 185, 129, 0.6);
+      color: #ECFDF5;
+      white-space: nowrap;
+    }
+    .net-pill.offline {
+      background: #FEF3C7;
+      border-color: #F59E0B;
+      color: #92400E;
+    }
+
     .container { max-width: 860px; margin: 28px auto; padding: 0 16px; }
     .card {
       background: var(--card);
@@ -81,10 +106,21 @@
     .btn-success { background: var(--success); }
     .btn-danger { background: var(--danger); }
     .btn-outline { background: transparent; border: 1.5px solid var(--primary); color: var(--primary); }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+    .btn-row .btn { flex: 1 1 200px; }
+
     .alert { padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 0.92rem; }
     .alert-info { background: #EFF6FF; border-left: 4px solid var(--primary); color: #1E40AF; }
     .alert-warning { background: #FFFBEB; border-left: 4px solid var(--warning); color: #92400E; }
     .alert-danger { background: #FEF2F2; border-left: 4px solid var(--danger); color: #991B1B; }
+    .confirm-identity-box {
+      background: #EFF6FF;
+      border: 1.5px solid #93C5FD;
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
     .privacy-box {
       background: #F9FAFB;
       border: 1px solid #E5E7EB;
@@ -92,7 +128,7 @@
       padding: 14px;
       font-size: 0.86rem;
       color: #374151;
-      max-height: 150px;
+      max-height: 170px;
       overflow-y: auto;
       margin-bottom: 14px;
     }
@@ -107,6 +143,29 @@
     }
     .checkbox-row input { margin-top: 4px; transform: scale(1.2); }
     .instr-list li { margin-bottom: 8px; }
+
+    /* Barra de micrófono en calibración */
+    .mic-test-wrap {
+      max-width: 340px;
+      margin: 10px auto 0;
+      text-align: left;
+      font-size: 0.82rem;
+      color: #374151;
+    }
+    .mic-bar-bg {
+      width: 100%;
+      height: 10px;
+      background: #E5E7EB;
+      border-radius: 999px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .mic-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--success);
+      transition: width 0.1s linear;
+    }
 
     /* Monitor flotante REC */
     #proctor-pip {
@@ -169,7 +228,7 @@
       z-index: 800;
       font-size: 0.85rem;
       font-weight: 700;
-      color: rgba(17,24,39,0.09);
+      color: rgba(17,24,39,0.11);
       transform: rotate(-18deg);
       white-space: nowrap;
       display: none;
@@ -211,6 +270,7 @@
     }
 
     /* Examen */
+    #step-exam { padding-bottom: calc(170px + env(safe-area-inset-bottom, 20px)); }
     .exam-hud {
       display: flex;
       flex-wrap: wrap;
@@ -232,6 +292,12 @@
       border-radius: 8px;
       font-variant-numeric: tabular-nums;
     }
+    .timer-urgent {
+      color: var(--danger) !important;
+      background: #FEF2F2 !important;
+      animation: pulseWarn 1.2s infinite;
+    }
+    @keyframes pulseWarn { 0%,100% { opacity: 1; } 50% { opacity: 0.65; } }
     .strikes-box {
       font-size: 0.9rem;
       font-weight: 600;
@@ -286,6 +352,20 @@
       font-size: 1.1rem;
       font-weight: 700;
     }
+
+    @media (max-width: 600px) {
+      header { padding: 12px 14px; }
+      header h1 { font-size: 1rem; }
+      .card { padding: 20px 16px; }
+      #proctor-pip {
+        width: 115px;
+        bottom: 10px;
+        right: 10px;
+      }
+      #proctor-pip video {
+        height: 78px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -295,7 +375,7 @@
       <h1 id="hdr-title">Portal Integral de Evaluación Supervisada</h1>
       <div class="sub" id="hdr-sub">Sistema de Supervisión Académica</div>
     </div>
-    <div style="font-size:0.82rem; opacity:0.9;">Conexión segura</div>
+    <div id="net-status" class="net-pill">Conexión estable</div>
   </header>
 
   <div id="watermark"></div>
@@ -319,16 +399,19 @@
     </div>
   </div>
 
-  <!-- Paneo 360° -->
+  <!-- Paneo 360° con aviso previo -->
   <div class="modal-overlay" id="modal-pan">
     <div class="modal-box">
       <h2 id="pan-title">🎥 Verificación de entorno</h2>
       <p style="font-size:0.95rem; color:#374151;">
-        Gira lentamente tu cámara para mostrar tu escritorio y el espacio alrededor durante <strong>8 segundos</strong>. El cronómetro está pausado.
+        Acomoda tu cámara. Cuando presiones el botón de abajo, tendrás <strong>8 segundos</strong> para girar lentamente la cámara y mostrar tu escritorio y el espacio alrededor. El cronómetro del examen está pausado.
       </p>
       <video id="pan-video" class="preview-video" autoplay muted playsinline></video>
-      <div class="progress-bar"><div class="progress-fill" id="pan-progress"></div></div>
-      <div id="pan-timer-txt" style="font-weight:700; color:var(--primary);">Preparando...</div>
+      <button class="btn" id="btn-start-pan" style="margin-top:10px;">Listo, comenzar paneo (8 s)</button>
+      <div id="pan-active-wrap" class="hidden">
+        <div class="progress-bar"><div class="progress-fill" id="pan-progress"></div></div>
+        <div id="pan-timer-txt" style="font-weight:700; color:var(--primary);">Grabando entorno... 8 s</div>
+      </div>
     </div>
   </div>
 
@@ -358,6 +441,16 @@
         <input type="password" id="inp-clave" autocomplete="off" />
       </div>
       <button class="btn" id="btn-verificar">Verificar acceso</button>
+
+      <!-- Confirmación previa de matrícula -->
+      <div id="confirm-identity-box" class="confirm-identity-box hidden">
+        <div style="font-weight:700; color:var(--primary); margin-bottom:6px;">Confirma tus datos antes de continuar:</div>
+        <div id="confirm-identity-text" style="font-size:0.95rem; color:#111827;"></div>
+        <div class="btn-row">
+          <button class="btn btn-success" id="btn-confirm-yes">Sí, es correcta — Continuar</button>
+          <button class="btn btn-outline" id="btn-confirm-no">No, corregir matrícula</button>
+        </div>
+      </div>
     </div>
 
     <!-- PANTALLA 2: PRIVACIDAD Y CALIBRACIÓN -->
@@ -366,8 +459,9 @@
       <p id="cal-info" style="color:var(--muted); margin-top:-6px;"></p>
 
       <div class="privacy-box">
-        <strong>Aviso de privacidad y supervisión académica (LFPDPPP):</strong><br>
-        Con el único propósito de garantizar la integridad académica de esta evaluación parcial, esta plataforma capturará audio, video e imágenes de tu entorno durante la prueba, así como registros técnicos de actividad en pantalla. Las evidencias se almacenarán de forma confidencial en la carpeta institucional del docente titular y se usarán exclusivamente para auditoría y validación académica. Al marcar la casilla, otorgas tu consentimiento expreso para el tratamiento de estos datos.
+        <strong>Aviso de privacidad y supervisión académica (LFPDPPP / Derechos ARCO):</strong><br>
+        Con el único propósito de garantizar la integridad académica de esta evaluación parcial, esta plataforma capturará audio, video e imágenes de tu entorno durante la prueba, así como registros técnicos de actividad en pantalla. Las evidencias se almacenarán de forma confidencial bajo responsabilidad del docente titular durante un plazo máximo de <strong>30 días naturales</strong> posteriores al cierre de actas, tras lo cual serán eliminadas de forma definitiva.<br><br>
+        <strong>Derecho de oposición:</strong> Si no deseas autorizar el monitoreo por audio y video en esta modalidad remota, debes notificarlo a tu docente titular antes del inicio de la evaluación para asignarte una modalidad presencial o alternativa sin grabación. Podrás ejercer tus derechos ARCO mediante solicitud directa al correo institucional del docente. Al marcar la casilla, otorgas tu consentimiento expreso para el tratamiento de estos datos.
       </div>
 
       <label class="checkbox-row">
@@ -377,6 +471,10 @@
 
       <div id="hardware-box" class="hidden" style="text-align:center; margin-top:14px;">
         <video id="setup-video" class="preview-video" autoplay muted playsinline></video>
+        <div class="mic-test-wrap">
+          <span>Nivel de micrófono en vivo (verifica que la barra se mueva al hablar):</span>
+          <div class="mic-bar-bg"><div class="mic-bar-fill" id="setup-mic-bar"></div></div>
+        </div>
         <div id="noise-status" class="alert alert-info" style="margin-top:12px;">Calibrando ruido ambiental...</div>
         <div class="progress-bar"><div class="progress-fill" id="noise-progress"></div></div>
       </div>
@@ -461,10 +559,10 @@
     // =========================================================================
     let stream = null, recorder = null, chunks = [];
     let recordingSupported = false, recordingMode = "Video+Audio";
-    let audioCtx = null, analyser = null, alertasAudio = 0;
-    let materiaEndpoint = "", alumno = {}, examCfg = {}, preguntas = [], respuestas = {}, qIndex = 0;
+    let audioCtx = null, analyser = null, alertasAudio = 0, setupMicLoopId = null;
+    let materiaEndpoint = "", metaActual = null, alumno = {}, examCfg = {}, preguntas = [], respuestas = {}, qIndex = 0;
     let examActive = false, pausedForPan = false, finalizando = false;
-    let secondsLeft = 3600, timerId = null, monitorId = null, fallbackId = null;
+    let secondsLeft = 3600, timerId = null, monitorId = null, fallbackId = null, aviso5MinDado = false;
     let faltas = 0, maxFaltas = 3, bitacora = [], lastViolation = 0;
     let panAleatorioQ = 0, panAleatorioHecho = false;
     let bloqueInicio = 0;
@@ -473,6 +571,47 @@
 
     const pad = n => String(n).padStart(2, "0");
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    // =========================================================================
+    // INDICADOR DE CONECTIVIDAD
+    // =========================================================================
+    function actualizarRedUI() {
+      const pill = document.getElementById("net-status");
+      if (navigator.onLine) {
+        pill.textContent = "Conexión estable";
+        pill.classList.remove("offline");
+      } else {
+        pill.textContent = "Sin conexión — tus respuestas están a salvo";
+        pill.classList.add("offline");
+        if (examActive) logEvent("Pérdida temporal de conexión a internet.");
+      }
+    }
+    window.addEventListener("online", () => {
+      actualizarRedUI();
+      if (examActive) logEvent("Conexión a internet restablecida.");
+    });
+    window.addEventListener("offline", actualizarRedUI);
+    actualizarRedUI();
+
+    // =========================================================================
+    // AVISO SONORO SUAVE A LOS 5 MINUTOS
+    // =========================================================================
+    function emitirAvisoSonoro() {
+      try {
+        const ctx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === "suspended") ctx.resume();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(660, ctx.currentTime);
+        gain.gain.setValueAtTime(0.08, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.45);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 0.45);
+      } catch (e) {}
+    }
 
     // =========================================================================
     // UTILIDADES
@@ -557,15 +696,18 @@
     }
 
     // =========================================================================
-    // PASO 1: ACCESO
+    // PASO 1: ACCESO Y CONFIRMACIÓN DE MATRÍCULA
     // =========================================================================
     document.getElementById("btn-verificar").addEventListener("click", async () => {
       const matricula = document.getElementById("inp-matricula").value.trim();
       const clave = document.getElementById("inp-clave").value.trim().toUpperCase();
       const errBox = document.getElementById("login-error");
+      const confirmBox = document.getElementById("confirm-identity-box");
       const btn = document.getElementById("btn-verificar");
 
       errBox.classList.add("hidden");
+      confirmBox.classList.add("hidden");
+
       if (!matricula || !clave) {
         errBox.textContent = "Ingresa tu matrícula y la clave del examen.";
         errBox.classList.remove("hidden");
@@ -589,15 +731,13 @@
         if (meta.estadoHorario === "PROXIMAMENTE") throw new Error(`Este examen aún no abre. Apertura: ${meta.apertura} hrs.`);
         if (meta.estadoHorario === "CERRADO") throw new Error(`El periodo para este examen ya cerró (${meta.cierre} hrs).`);
 
-        if (meta.colorPrimario) document.documentElement.style.setProperty("--primary", meta.colorPrimario);
-        document.getElementById("hdr-title").textContent = `${meta.materia} (${meta.grupo})`;
-        document.getElementById("hdr-sub").textContent = meta.profesor;
-        document.getElementById("cal-materia").textContent = `${meta.materia} — ${meta.grupo}`;
-        document.getElementById("cal-info").textContent = `Docente: ${meta.profesor} | Duración: ${meta.duracionMinutos} min | Reactivos: ${meta.totalReactivos}`;
-
+        metaActual = meta;
         alumno = { matricula, password: clave };
-        document.getElementById("step-login").classList.add("hidden");
-        document.getElementById("step-calibration").classList.remove("hidden");
+
+        document.getElementById("confirm-identity-text").innerHTML =
+          `Matrícula ingresada: <strong>${matricula}</strong><br>Evaluación: <strong>${meta.materia} (${meta.grupo})</strong> — ${meta.profesor}`;
+        confirmBox.classList.remove("hidden");
+        btn.classList.add("hidden");
       } catch (err) {
         errBox.textContent = err.message;
         errBox.classList.remove("hidden");
@@ -605,6 +745,26 @@
         btn.disabled = false;
         btn.textContent = "Verificar acceso";
       }
+    });
+
+    document.getElementById("btn-confirm-yes").addEventListener("click", () => {
+      if (!metaActual) return;
+      if (metaActual.colorPrimario) document.documentElement.style.setProperty("--primary", metaActual.colorPrimario);
+      document.getElementById("hdr-title").textContent = `${metaActual.materia} (${metaActual.grupo})`;
+      document.getElementById("hdr-sub").textContent = metaActual.profesor;
+      document.getElementById("cal-materia").textContent = `${metaActual.materia} — ${metaActual.grupo}`;
+      document.getElementById("cal-info").textContent = `Docente: ${metaActual.profesor} | Duración: ${metaActual.duracionMinutos} min | Reactivos: ${metaActual.totalReactivos}`;
+
+      document.getElementById("step-login").classList.add("hidden");
+      document.getElementById("step-calibration").classList.remove("hidden");
+    });
+
+    document.getElementById("btn-confirm-no").addEventListener("click", () => {
+      document.getElementById("confirm-identity-box").classList.add("hidden");
+      document.getElementById("btn-verificar").classList.remove("hidden");
+      const inpMat = document.getElementById("inp-matricula");
+      inpMat.value = "";
+      inpMat.focus();
     });
 
     // =========================================================================
@@ -626,6 +786,14 @@
       analyser = audioCtx.createAnalyser();
       analyser.fftSize = 256;
       src.connect(analyser);
+
+      if (setupMicLoopId) clearInterval(setupMicLoopId);
+      setupMicLoopId = setInterval(() => {
+        const bar = document.getElementById("setup-mic-bar");
+        if (!bar) return;
+        const lvl = nivelAudio();
+        bar.style.width = `${Math.min(100, (lvl / 90) * 100)}%`;
+      }, 120);
     }
 
     document.getElementById("btn-activate-devices").addEventListener("click", async () => {
@@ -674,7 +842,7 @@
               btnAct.textContent = "Volver a medir ruido ambiental";
             } else {
               st.className = "alert alert-info";
-              st.textContent = "✅ Entorno silencioso y cámara verificados.";
+              st.textContent = "✅ Entorno silencioso, cámara y micrófono verificados.";
               btnAct.classList.add("hidden");
               btnNext.classList.remove("hidden");
             }
@@ -685,6 +853,7 @@
     }
 
     document.getElementById("btn-to-instructions").addEventListener("click", () => {
+      if (setupMicLoopId) { clearInterval(setupMicLoopId); setupMicLoopId = null; }
       document.getElementById("step-calibration").classList.add("hidden");
       document.getElementById("step-instructions").classList.remove("hidden");
     });
@@ -728,15 +897,15 @@
         maxFaltas = examCfg.maxAdvertencias || 3;
         secondsLeft = (examCfg.duracionMinutos || 60) * 60;
 
-        // Paneo aleatorio entre la pregunta 2 y la última (el 1 ya tiene paneo inicial)
+        if (window.screen && window.screen.isExtended) {
+          logEvent("Aviso técnico: Se detectó pantalla externa/extendida conectada.");
+        }
+
         const total = preguntas.length;
         panAleatorioQ = total >= 2 ? Math.floor(Math.random() * (total - 1)) + 2 : 0;
 
-        // Paneo inicial: se graba, se corta y se sube; luego se reinicia la grabación
-        // para el primer bloque de preguntas.
-        startRecording();
-        await ejecutarPaneo("Verificación inicial de entorno", 8);
-        await cortarYSubir("paneo_inicial");
+        // Paneo inicial con botón previo; pausedForPan se libera después de cortarYSubir
+        await ejecutarPaneoConInicio("Verificación inicial de entorno", 8, "paneo_inicial");
         startRecording();
 
         document.getElementById("step-instructions").classList.add("hidden");
@@ -755,35 +924,50 @@
     }
 
     // =========================================================================
-    // PANEO 360°
+    // PANEO 360° CON PREPARACIÓN PREVIA
     // =========================================================================
-    function ejecutarPaneo(titulo, segundos) {
+    function ejecutarPaneoConInicio(titulo, segundos, nombreBloqueOpcional = null) {
       return new Promise(resolve => {
         pausedForPan = true;
         const modal = document.getElementById("modal-pan");
         const vid = document.getElementById("pan-video");
+        const btnStart = document.getElementById("btn-start-pan");
+        const activeWrap = document.getElementById("pan-active-wrap");
         const prog = document.getElementById("pan-progress");
         const txt = document.getElementById("pan-timer-txt");
+
         document.getElementById("pan-title").textContent = `🎥 ${titulo}`;
+        prog.style.width = "0%";
+        btnStart.classList.remove("hidden");
+        activeWrap.classList.add("hidden");
         vid.srcObject = stream;
         modal.style.display = "flex";
-        logEvent(`Inició paneo: ${titulo}`);
 
-        let t = 0;
-        const total = segundos * 1000;
-        const id = setInterval(() => {
-          t += 200;
-          prog.style.width = `${Math.min(100, (t / total) * 100)}%`;
-          txt.textContent = `Grabando entorno... ${Math.ceil((total - t) / 1000)} s`;
-          if (t >= total) {
-            clearInterval(id);
-            modal.style.display = "none";
-            vid.srcObject = null;
-            pausedForPan = false;
-            logEvent(`Completó paneo: ${titulo}`);
-            resolve();
-          }
-        }, 200);
+        btnStart.onclick = () => {
+          btnStart.classList.add("hidden");
+          activeWrap.classList.remove("hidden");
+          if (nombreBloqueOpcional) startRecording();
+          logEvent(`Inició paneo: ${titulo}`);
+
+          let t = 0;
+          const total = segundos * 1000;
+          const id = setInterval(async () => {
+            t += 200;
+            prog.style.width = `${Math.min(100, (t / total) * 100)}%`;
+            txt.textContent = `Grabando entorno... ${Math.ceil((total - t) / 1000)} s`;
+            if (t >= total) {
+              clearInterval(id);
+              modal.style.display = "none";
+              vid.srcObject = null;
+              logEvent(`Completó paneo: ${titulo}`);
+              if (nombreBloqueOpcional) {
+                await cortarYSubir(nombreBloqueOpcional);
+              }
+              pausedForPan = false;
+              resolve();
+            }
+          }, 200);
+        };
       });
     }
 
@@ -798,12 +982,10 @@
       recorder.ondataavailable = e => {
         if (e.data && e.data.size > 0) chunks.push(e.data);
       };
-      recorder.start(500); // Entrega datos cada medio segundo
+      recorder.start(500);
       logEvent("Grabación iniciada.");
     }
 
-    // Detiene la grabación actual y devuelve el Blob con todo lo grabado.
-    // El navegador garantiza que el último dataavailable llega antes del evento stop.
     function detenerYCapturar() {
       return new Promise(resolve => {
         if (!recorder) { resolve(null); return; }
@@ -826,8 +1008,6 @@
       });
     }
 
-    // Corta el bloque actual y lo sube. NO reinicia la grabación:
-    // el que llama decide cuándo volver a grabar.
     async function cortarYSubir(nombreBase) {
       const blob = await detenerYCapturar();
 
@@ -880,7 +1060,6 @@
       }
     }
 
-    // Respaldo para navegadores sin MediaRecorder: una foto cada 30 s
     function iniciarFallbackFotos() {
       fallbackId = setInterval(() => capturarFoto(), 30000);
     }
@@ -936,8 +1115,12 @@
       const el = document.getElementById("hud-timer");
       el.textContent = `${pad(Math.floor(s / 60))}:${pad(s % 60)}`;
       if (s <= 300) {
-        el.style.color = "var(--danger)";
-        el.style.background = "#FEF2F2";
+        el.classList.add("timer-urgent");
+        if (!aviso5MinDado && examActive) {
+          aviso5MinDado = true;
+          emitirAvisoSonoro();
+          logEvent("Aviso de 5 minutos restantes emitido.");
+        }
       }
     }
 
@@ -946,7 +1129,7 @@
       if (!panAleatorioHecho && panAleatorioQ && idx + 1 === panAleatorioQ) {
         panAleatorioHecho = true;
         logEvent(`Paneo aleatorio antes de la pregunta ${panAleatorioQ}`);
-        await ejecutarPaneo("Verificación aleatoria de entorno", 8);
+        await ejecutarPaneoConInicio("Verificación aleatoria de entorno", 8, null);
       }
       renderPregunta();
     }
@@ -1009,7 +1192,6 @@
         return;
       }
 
-      // Cada 5 preguntas se corta y sube el bloque de video, y se reinicia la grabación
       if ((qIndex + 1) % TAM_BLOQUE === 0) {
         await cerrarBloqueDePreguntas();
       }
@@ -1031,19 +1213,56 @@
       document.addEventListener("contextmenu", e => { if (examActive) e.preventDefault(); });
       document.addEventListener("copy", e => { if (examActive) { e.preventDefault(); registrarFalta("Intento de copiar texto"); } });
       document.addEventListener("paste", e => { if (examActive) { e.preventDefault(); registrarFalta("Intento de pegar texto"); } });
+
+      document.addEventListener("keyup", e => {
+        if (!examActive) return;
+        if (e.key === "PrintScreen") {
+          navigator.clipboard?.writeText("").catch(() => {});
+          registrarFalta("Intento de captura de pantalla (PrintScreen)");
+        }
+      });
+
       document.addEventListener("keydown", e => {
         if (!examActive) return;
         const k = e.key.toUpperCase();
-        if (e.key === "F12" || (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(k)) || (e.ctrlKey && ["U", "S", "P"].includes(k))) {
+        const esCapturaOInspeccion =
+          e.key === "PrintScreen" ||
+          (e.metaKey && e.shiftKey && ["S", "3", "4", "5"].includes(k)) ||
+          (e.ctrlKey && e.shiftKey && ["I", "J", "C"].includes(k)) ||
+          (e.ctrlKey && ["U", "S", "P"].includes(k)) ||
+          e.key === "F12";
+
+        if (esCapturaOInspeccion) {
           e.preventDefault();
-          registrarFalta("Atajo de teclado restringido");
+          document.body.classList.add("privacy-blur");
+          setTimeout(() => document.body.classList.remove("privacy-blur"), 1500);
+          registrarFalta("Atajo de captura o inspección bloqueado");
         }
       });
+
       document.addEventListener("visibilitychange", () => {
-        if (examActive && document.hidden) registrarFalta("Cambio de pestaña o aplicación");
+        if (!examActive) return;
+        if (document.hidden) {
+          document.body.classList.add("privacy-blur");
+          registrarFalta("Cambio de pestaña o aplicación");
+        } else {
+          document.body.classList.remove("privacy-blur");
+        }
       });
+
       document.addEventListener("fullscreenchange", () => {
         if (examActive && !document.fullscreenElement) registrarFalta("Salida de pantalla completa");
+      });
+
+      // Solo difuminado visual en blur (sin falta automática para evitar falsos positivos por notificaciones)
+      window.addEventListener("blur", () => {
+        if (examActive && !pausedForPan) document.body.classList.add("privacy-blur");
+      });
+
+      window.addEventListener("focus", () => {
+        document.body.classList.remove("privacy-blur");
+        const pipVid = document.getElementById("pip-video");
+        if (pipVid && pipVid.paused) pipVid.play().catch(() => {});
       });
 
       let ticksSinTrack = 0, ticksTapado = 0, faltaTrack = false, faltaTapado = false, ruido = 0;
@@ -1052,11 +1271,14 @@
 
         const v = stream ? stream.getVideoTracks()[0] : null;
         const a = stream ? stream.getAudioTracks()[0] : null;
-        if (!v || v.readyState !== "live" || !v.enabled || !a || a.readyState !== "live") {
+        const pipVid = document.getElementById("pip-video");
+        if (pipVid && pipVid.paused && examActive) pipVid.play().catch(() => {});
+
+        if (!v || v.readyState !== "live" || !v.enabled || v.muted || !a || a.readyState !== "live" || a.muted) {
           ticksSinTrack++;
-          if (ticksSinTrack >= 3 && !faltaTrack) {
+          if (ticksSinTrack >= 2 && !faltaTrack) {
             faltaTrack = true;
-            registrarFalta("Cámara o micrófono desconectados");
+            registrarFalta("Cámara o micrófono interrumpidos (llamada, Siri o app externa)");
           }
           return;
         }
@@ -1111,6 +1333,7 @@
 
     document.getElementById("btn-resume-fullscreen").addEventListener("click", async () => {
       await enterFullscreen();
+      document.body.classList.remove("privacy-blur");
       document.getElementById("modal-warning").style.display = "none";
     });
 
@@ -1121,13 +1344,13 @@
       if (finalizando) return;
       finalizando = true;
       examActive = false;
+      document.body.classList.remove("privacy-blur");
       clearInterval(timerId);
       clearInterval(monitorId);
       clearInterval(fallbackId);
       document.getElementById("modal-warning").style.display = "none";
 
       try {
-        // 1. Último bloque (sin reiniciar la grabación) y subidas pendientes
         setBusy(true, "Guardando el último bloque de video...");
         const total = preguntas.length;
         await cortarYSubir(`bloque_final_preg${pad(bloqueInicio + 1)}-${pad(total)}`);
@@ -1142,7 +1365,6 @@
 
         apagarDispositivos();
 
-        // 2. Cierre en el servidor (reintenta si falla la red)
         let res = null;
         while (!res || res.status !== "ok") {
           setBusy(true, "Cerrando examen en el servidor...");
@@ -1166,7 +1388,6 @@
         }
         resultadoFinal = res;
 
-        // 3. Comprobante PNG, subido a la carpeta del alumno
         setBusy(true, "Generando tu comprobante...");
         evidenciaFinal = await generarComprobantePNG({
           nombre: alumno.nombre,
@@ -1251,13 +1472,9 @@
         mostrarImagenParaGuardar(URL.createObjectURL(evidenciaFinal));
     }
 
-    // =========================================================================
-    // DESCARGA DEL COMPROBANTE (varios métodos, en orden)
-    // =========================================================================
     async function descargarEvidencia(blob, nombre) {
       const url = URL.createObjectURL(blob);
       const metodos = [
-        // 1. Enlace con atributo download (escritorio, Android, Chrome, Edge, Firefox)
         () => {
           const a = document.createElement("a");
           a.href = url;
@@ -1267,7 +1484,6 @@
           a.remove();
           return true;
         },
-        // 2. API antigua de Edge/IE
         () => {
           if (navigator.msSaveOrOpenBlob) {
             navigator.msSaveOrOpenBlob(blob, nombre);
@@ -1275,13 +1491,10 @@
           }
           return false;
         },
-        // 3. Abrir en pestaña nueva (iPhone / Safari)
         () => !!window.open(url, "_blank"),
-        // 4. Mostrar la imagen para guardarla manteniendo presionada
         () => { mostrarImagenParaGuardar(url); return true; }
       ];
 
-      // Los navegadores no informan si la descarga se completó; solo se detectan errores.
       for (const metodo of metodos) {
         try {
           if (metodo()) return true;
