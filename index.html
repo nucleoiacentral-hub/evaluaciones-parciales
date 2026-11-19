@@ -732,9 +732,12 @@
         const total = preguntas.length;
         panAleatorioQ = total >= 2 ? Math.floor(Math.random() * (total - 1)) + 2 : 0;
 
+        // Paneo inicial: se graba, se corta y se sube; luego se reinicia la grabación
+        // para el primer bloque de preguntas.
         startRecording();
         await ejecutarPaneo("Verificación inicial de entorno", 8);
-        await cortarYSubir("paneo_inicial", true);
+        await cortarYSubir("paneo_inicial");
+        startRecording();
 
         document.getElementById("step-instructions").classList.add("hidden");
         document.getElementById("step-exam").classList.remove("hidden");
@@ -796,8 +799,11 @@
         if (e.data && e.data.size > 0) chunks.push(e.data);
       };
       recorder.start(500); // Entrega datos cada medio segundo
+      logEvent("Grabación iniciada.");
     }
 
+    // Detiene la grabación actual y devuelve el Blob con todo lo grabado.
+    // El navegador garantiza que el último dataavailable llega antes del evento stop.
     function detenerYCapturar() {
       return new Promise(resolve => {
         if (!recorder) { resolve(null); return; }
@@ -814,19 +820,16 @@
           return;
         }
 
-        rec.onstop = () => {
-          // Espera 150 ms para asegurar que el último ondataavailable termine de ejecutarse
-          setTimeout(armarBlob, 150);
-        };
-
+        rec.onstop = armarBlob;
         try { rec.requestData(); } catch (e) {}
         rec.stop();
       });
     }
 
-    async function cortarYSubir(nombreBase, reiniciar) {
+    // Corta el bloque actual y lo sube. NO reinicia la grabación:
+    // el que llama decide cuándo volver a grabar.
+    async function cortarYSubir(nombreBase) {
       const blob = await detenerYCapturar();
-      if (reiniciar && recordingSupported && examActive) startRecording();
 
       if (blob && blob.size > 0) {
         logEvent(`Bloque cortado: ${nombreBase} (${Math.round(blob.size / 1024)} KB)`);
@@ -879,7 +882,7 @@
 
     // Respaldo para navegadores sin MediaRecorder: una foto cada 30 s
     function iniciarFallbackFotos() {
-      fallbackId = setInterval(capturarFoto, 30000);
+      fallbackId = setInterval(() => capturarFoto(), 30000);
     }
 
     async function capturarFoto(nombreOpcional) {
@@ -1006,7 +1009,7 @@
         return;
       }
 
-      // Cada 5 preguntas se corta y sube el bloque de video
+      // Cada 5 preguntas se corta y sube el bloque de video, y se reinicia la grabación
       if ((qIndex + 1) % TAM_BLOQUE === 0) {
         await cerrarBloqueDePreguntas();
       }
@@ -1016,7 +1019,8 @@
     async function cerrarBloqueDePreguntas() {
       const desde = bloqueInicio + 1;
       const hasta = qIndex + 1;
-      await cortarYSubir(`bloque_preg${pad(desde)}-${pad(hasta)}`, true);
+      await cortarYSubir(`bloque_preg${pad(desde)}-${pad(hasta)}`);
+      startRecording();
       bloqueInicio = hasta;
     }
 
@@ -1123,10 +1127,10 @@
       document.getElementById("modal-warning").style.display = "none";
 
       try {
-        // 1. Último bloque y subidas pendientes
+        // 1. Último bloque (sin reiniciar la grabación) y subidas pendientes
         setBusy(true, "Guardando el último bloque de video...");
         const total = preguntas.length;
-        await cortarYSubir(`bloque_final_preg${pad(bloqueInicio + 1)}-${pad(total)}`, false);
+        await cortarYSubir(`bloque_final_preg${pad(bloqueInicio + 1)}-${pad(total)}`);
         await Promise.all(inflight);
 
         while (pendientes.length > 0) {
