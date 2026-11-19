@@ -461,7 +461,7 @@
       <div class="privacy-box">
         <strong>Aviso de privacidad y supervisión académica:</strong><br>
         Con el único propósito de garantizar la integridad académica de esta evaluación parcial, esta plataforma capturará audio, video e imágenes de tu entorno durante la prueba, así como registros técnicos de actividad en pantalla. Las evidencias se almacenarán de forma confidencial bajo responsabilidad del docente titular durante un plazo máximo de <strong>30 días naturales</strong> posteriores al cierre de actas, tras lo cual serán eliminadas de forma definitiva.<br><br>
-        Si no deseas autorizar el monitoreo por audio y video en esta modalidad remota, debes notificarlo a tu docente titular antes del inicio de la evaluación para presentar la evaluación en modalidad presencial. Al marcar la casilla, otorgas tu consentimiento expreso para el tratamiento de estos datos[cite: 3].
+        Si no deseas autorizar el monitoreo por audio y video en esta modalidad remota, debes notificarlo a tu docente titular antes del inicio de la evaluación para presentar la evaluación en modalidad presencial. Al marcar la casilla, otorgas tu consentimiento expreso para el tratamiento de estos datos.
       </div>
 
       <label class="checkbox-row">
@@ -1254,9 +1254,17 @@
         if (examActive && !document.fullscreenElement) registrarFalta("Salida de pantalla completa");
       });
 
-      // Solo difuminado visual en blur (sin falta automática para evitar falsos positivos por notificaciones)
+      // Difuminado visual y registro en bitácora al perder foco (sin falta ni castigo).
+      // La hora la agrega logEvent automáticamente. Filtro de 1 s para evitar duplicados.
+      let lastBlurLog = 0;
       window.addEventListener("blur", () => {
-        if (examActive && !pausedForPan) document.body.classList.add("privacy-blur");
+        if (!examActive || pausedForPan) return;
+        document.body.classList.add("privacy-blur");
+        const ahora = Date.now();
+        if (ahora - lastBlurLog > 1000) {
+          lastBlurLog = ahora;
+          logEvent("Pérdida de foco de la ventana (posible app superpuesta, Lens o asistente).");
+        }
       });
 
       window.addEventListener("focus", () => {
