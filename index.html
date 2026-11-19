@@ -790,50 +790,50 @@
     function startRecording() {
       if (!recordingSupported) { iniciarFallbackFotos(); return; }
       const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") ? "video/webm;codecs=vp8,opus" : "video/webm";
+      chunks = [];
       recorder = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 180000, audioBitsPerSecond: 32000 });
-      chunks = [];
-      recorder.ondataavailable = e => { if (e.data && e.data.size > 0) chunks.push(e.data); };
-      recorder.start(5000);
+      recorder.ondataavailable = e => {
+        if (e.data && e.data.size > 0) chunks.push(e.data);
+      };
+      recorder.start(500); // Entrega datos cada medio segundo
     }
 
-    // Detiene la grabación actual y devuelve el blob del bloque
     function detenerYCapturar() {
-  return new Promise(resolve => {
-    if (!recorder) { resolve(null); return; }
-    const rec = recorder;
+      return new Promise(resolve => {
+        if (!recorder) { resolve(null); return; }
+        const rec = recorder;
 
-    // Si ya estaba inactivo pero quedaron chunks acumulados, los rescatamos
-    if (rec.state === "inactive") {
-      if (chunks.length > 0) {
-        const blob = new Blob(chunks, { type: rec.mimeType || "video/webm" });
-        chunks = [];
-        resolve(blob);
-      } else {
-        resolve(null);
-      }
-      return;
+        const armarBlob = () => {
+          const blob = chunks.length > 0 ? new Blob(chunks, { type: rec.mimeType || "video/webm" }) : null;
+          chunks = [];
+          resolve(blob);
+        };
+
+        if (rec.state === "inactive") {
+          armarBlob();
+          return;
+        }
+
+        rec.onstop = () => {
+          // Espera 150 ms para asegurar que el último ondataavailable termine de ejecutarse
+          setTimeout(armarBlob, 150);
+        };
+
+        try { rec.requestData(); } catch (e) {}
+        rec.stop();
+      });
     }
 
-    rec.onstop = () => {
-      const blob = new Blob(chunks, { type: rec.mimeType || "video/webm" });
-      chunks = [];
-      resolve(blob);
-    };
-
-    try {
-      rec.requestData(); // Fuerza a volcar lo que lleva grabado hasta ese milisegundo
-    } catch (e) {}
-    rec.stop();
-  });
-}
-
-    // Corta el bloque, reinicia la grabación y sube en segundo plano
     async function cortarYSubir(nombreBase, reiniciar) {
       const blob = await detenerYCapturar();
       if (reiniciar && recordingSupported && examActive) startRecording();
+
       if (blob && blob.size > 0) {
-        logEvent(`Bloque cortado: ${nombreBase}`);
+        logEvent(`Bloque cortado: ${nombreBase} (${Math.round(blob.size / 1024)} KB)`);
         inflight.push(subirConReintento(blob, nombreBase));
+      } else {
+        logEvent(`Aviso: ${nombreBase} sin datos de video; se toma captura de respaldo.`);
+        await capturarFoto(nombreBase);
       }
       return blob;
     }
@@ -882,14 +882,14 @@
       fallbackId = setInterval(capturarFoto, 30000);
     }
 
-    async function capturarFoto() {
+    async function capturarFoto(nombreOpcional) {
       const v = document.getElementById("pip-video");
       if (!v || v.readyState < 2) return;
       const c = document.createElement("canvas");
       c.width = 320; c.height = 240;
       c.getContext("2d").drawImage(v, 0, 0, 320, 240);
-      const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.65));
-      if (blob) inflight.push(subirConReintento(blob, `foto_${Date.now()}`));
+      const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.75));
+      if (blob) inflight.push(subirConReintento(blob, nombreOpcional || `foto_${Date.now()}`));
     }
 
     // =========================================================================
