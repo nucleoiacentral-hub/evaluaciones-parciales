@@ -542,6 +542,10 @@
 
     <!-- PANTALLA 4: EXAMEN, PREGUNTA POR PREGUNTA -->
     <div id="step-exam" class="hidden">
+      <div id="cam-alert" class="alert alert-danger hidden" style="position:fixed; top:80px; left:50%; transform:translateX(-50%); z-index:1500; font-weight:700; max-width:90%; text-align:center; box-shadow: 0 8px 20px rgba(0,0,0,0.25);">
+        📷 No se detecta imagen en la cámara. Descúbrela o ajústala para continuar.
+      </div>
+
       <div class="exam-hud">
         <div>
           <div style="font-weight:700;" id="hud-alumno">Alumno</div>
@@ -729,9 +733,16 @@
       const ctx = c.getContext("2d");
       ctx.drawImage(v, 0, 0, 32, 24);
       const d = ctx.getImageData(0, 0, 32, 24).data;
-      let s = 0;
-      for (let i = 0; i < d.length; i += 4) s += (d[i] + d[i + 1] + d[i + 2]) / 3;
-      return s / (d.length / 4) < 6;
+      const n = d.length / 4;
+      let s = 0, s2 = 0;
+      for (let i = 0; i < d.length; i += 4) {
+        const g = (d[i] + d[i + 1] + d[i + 2]) / 3;
+        s += g; s2 += g * g;
+      }
+      const prom = s / n;
+      const desv = Math.sqrt(Math.max(0, s2 / n - prom * prom));
+      console.log("cámara brillo:", prom.toFixed(1), "variación:", desv.toFixed(1)); // quítalo después de calibrar
+      return prom < 20 || desv < 4;
     }
 
     async function enterFullscreen() {
@@ -1430,12 +1441,16 @@
 
         if (lenteTapado()) {
           ticksTapado++;
-          if (ticksTapado >= 4 && !faltaTapado) {
+          if (ticksTapado === 1) logEvent("Imagen de cámara oscura o uniforme (posible obturador o lente tapado).");
+          if (ticksTapado === 2) document.getElementById("cam-alert").classList.remove("hidden");
+          if (ticksTapado >= 3 && !faltaTapado) {
             faltaTapado = true;
-            registrarFalta("Cámara obstruida o sin iluminación");
+            registrarFalta("Cámara obstruida o sin imagen");
           }
           return;
         }
+        if (ticksTapado > 0) logEvent("Imagen de cámara recuperada.");
+        document.getElementById("cam-alert").classList.add("hidden");
         ticksTapado = 0;
         faltaTapado = false;
 
@@ -1493,6 +1508,7 @@
       clearInterval(fallbackId);
       document.getElementById("modal-warning").style.display = "none";
       document.getElementById("modal-confirm").style.display = "none";
+      document.getElementById("cam-alert").classList.add("hidden");
 
       try {
         const prom = tiemposPregunta.length ? Math.round(tiemposPregunta.reduce((a, b) => a + b, 0) / tiemposPregunta.length) : 0;
