@@ -458,6 +458,17 @@
 
   <div class="container">
 
+    <!-- BANNER DE RECUPERACIÓN DE SESIÓN SI HUBO RECARGA DE PÁGINA -->
+    <div class="card hidden" id="step-resume" style="border-left: 5px solid var(--warning);">
+      <h2 style="color:var(--warning);">🔄 Sesión de examen interrumpida detectada</h2>
+      <p id="resume-info" style="font-size:0.98rem; color:#374151;"></p>
+      <div class="alert alert-warning">
+        Tus respuestas anteriores y el tiempo restante están respaldados. Para continuar exactamente donde te quedaste, debes reactivar tu cámara, micrófono y pantalla completa.
+      </div>
+      <div id="resume-error" class="alert alert-danger hidden"></div>
+      <button class="btn btn-success" id="btn-resume-session">Reactivar cámara y continuar examen</button>
+    </div>
+
     <!-- PANTALLA 1: ACCESO -->
     <div class="card" id="step-login">
       <h2>Ingreso a Evaluación Parcial</h2>
@@ -590,6 +601,7 @@
     // =========================================================================
     const DIRECTORIO_URL = "https://script.google.com/macros/s/AKfycbwCtzJJHR9J2Rb8nUQzdl_mBR-mpESrGNNj_lBkzdWoqnqfYpg9kU_eV8A2keHC9-IM/exec";
     const TAM_BLOQUE = 5;
+    const STORAGE_KEY = "eval_supervisada_backup_v1";
 
     // =========================================================================
     // ESTADO
@@ -612,6 +624,122 @@
 
     const pad = n => String(n).padStart(2, "0");
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+    // =========================================================================
+    // RESPALDO LOCAL ANTI-REFRESH
+    // =========================================================================
+    function guardarProgresoLocal() {
+      if (!examActive || finalizando || !alumno.matricula) return;
+      try {
+        const snapshot = {
+          savedAt: Date.now(),
+          materiaEndpoint,
+          alumno,
+          examCfg,
+          preguntas,
+          respuestas,
+          qIndex,
+          secondsLeft,
+          faltas,
+          maxFaltas,
+          alertasAudio,
+          bitacora,
+          panAleatorioQ,
+          panAleatorioHecho,
+          bloqueInicio,
+          subidas,
+          tiemposPregunta,
+          clicsMouse,
+          clicsSinTrayectoria
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
+      } catch (e) {}
+    }
+
+    function limpiarProgresoLocal() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    }
+
+    function verificarSesionInterrumpida() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        // Solo restaurar sesiones recientes (menos de 3 horas)
+        if (!data || !data.alumno || !data.preguntas || (Date.now() - data.savedAt > 3 * 3600 * 1000)) {
+          limpiarProgresoLocal();
+          return;
+        }
+        document.getElementById("step-login").classList.add("hidden");
+        document.getElementById("step-resume").classList.remove("hidden");
+        document.getElementById("resume-info").innerHTML =
+          `Alumno: <strong>${data.alumno.nombre} (${data.alumno.matricula})</strong><br>` +
+          `Materia: <strong>${data.examCfg.materia} — ${data.examCfg.grupo}</strong><br>` +
+          `Progreso guardado: <strong>Pregunta ${data.qIndex + 1} de ${data.preguntas.length}</strong> (${Object.keys(data.respuestas || {}).length} respondidas).`;
+
+        document.getElementById("btn-resume-session").onclick = async () => {
+          const btn = document.getElementById("btn-resume-session");
+          const errBox = document.getElementById("resume-error");
+          errBox.classList.add("hidden");
+          btn.disabled = true;
+          btn.textContent = "Reactivando dispositivos...";
+          await enterFullscreen();
+          try {
+            await iniciarHardware();
+            if (setupMicLoopId) { clearInterval(setupMicLoopId); setupMicLoopId = null; }
+
+            materiaEndpoint = data.materiaEndpoint;
+            alumno = data.alumno;
+            examCfg = data.examCfg;
+            preguntas = data.preguntas;
+            respuestas = data.respuestas || {};
+            qIndex = data.qIndex || 0;
+            const fuera = Math.floor((Date.now() - data.savedAt) / 1000);
+            secondsLeft = Math.max(1, (data.secondsLeft || 0) - fuera);
+            faltas = data.faltas || 0;
+            maxFaltas = data.maxFaltas || 3;
+            alertasAudio = data.alertasAudio || 0;
+            bitacora = data.bitacora || [];
+            panAleatorioQ = data.panAleatorioQ || 0;
+            panAleatorioHecho = data.panAleatorioHecho || false;
+            bloqueInicio = data.bloqueInicio ?? 0;
+            subidas = data.subidas || 0;
+            tiemposPregunta = data.tiemposPregunta || [];
+            clicsMouse = data.clicsMouse || 0;
+            clicsSinTrayectoria = data.clicsSinTrayectoria || 0;
+
+            if (examCfg.colorPrimario) document.documentElement.style.setProperty("--primary", examCfg.colorPrimario);
+            document.getElementById("hdr-title").textContent = `${examCfg.materia} (${examCfg.grupo})`;
+            document.getElementById("hdr-sub").textContent = examCfg.profesor || "Sistema de Supervisión Académica";
+
+            recordingSupported = typeof MediaRecorder !== "undefined" &&
+              (MediaRecorder.isTypeSupported("video/webm;codecs=vp8,opus") || MediaRecorder.isTypeSupported("video/webm"));
+            recordingMode = recordingSupported ? "Video+Audio (bloques de 5 preguntas)" : "Respaldo Fotos30s";
+
+            logEvent(`Recarga de página detectada; tiempo fuera de la página: ${fuera} s; sesión restaurada en pregunta ${qIndex + 1} (advertencias: ${faltas}/${maxFaltas}).`);
+            if (!document.fullscreenElement) logEvent("Aviso: la sesión se reanudó sin pantalla completa.");
+
+            startRecording();
+            document.getElementById("step-resume").classList.add("hidden");
+            document.getElementById("step-exam").classList.remove("hidden");
+            montarHUD();
+            document.getElementById("hud-strikes").textContent = `Advertencias: ${faltas} / ${maxFaltas}`;
+            activarVigilancia();
+            examActive = true;
+            iniciarCronometro();
+            renderPregunta();
+            guardarProgresoLocal();
+          } catch (err) {
+            errBox.textContent = "Debes permitir acceso a cámara y micrófono para reanudar tu evaluación.";
+            errBox.classList.remove("hidden");
+            btn.disabled = false;
+            btn.textContent = "Reintentar reactivar cámara y continuar";
+          }
+        };
+      } catch (e) {
+        limpiarProgresoLocal();
+      }
+    }
 
     // =========================================================================
     // INDICADOR DE CONECTIVIDAD
@@ -978,6 +1106,7 @@
         montarHUD();
         activarVigilancia();
         examActive = true;
+        guardarProgresoLocal();
         iniciarCronometro();
         await mostrarPregunta(0);
       } catch (err) {
@@ -1104,6 +1233,7 @@
           if (res.status === "ok") {
             subidas++;
             actualizarEstadoEvidencia();
+            guardarProgresoLocal();
             return true;
           }
           console.warn("Servidor rechazó archivo:", res.message);
@@ -1168,6 +1298,7 @@
         if (!examActive || pausedForPan) return;
         secondsLeft--;
         actualizarReloj();
+        if (secondsLeft % 5 === 0) guardarProgresoLocal();
         if (secondsLeft <= 0) {
           logEvent("Tiempo agotado. Envío automático.");
           finalizarExamen(false);
@@ -1191,10 +1322,12 @@
 
     async function mostrarPregunta(idx) {
       qIndex = idx;
+      guardarProgresoLocal();
       if (!panAleatorioHecho && panAleatorioQ && idx + 1 === panAleatorioQ) {
-        panAleatorioHecho = true;
         logEvent(`Paneo aleatorio antes de la pregunta ${panAleatorioQ}`);
         await ejecutarPaneoConInicio("Verificación aleatoria de entorno", 8, null);
+        panAleatorioHecho = true;
+        guardarProgresoLocal();
       }
       renderPregunta();
     }
@@ -1235,7 +1368,11 @@
         inp.type = "radio";
         inp.name = "respuesta";
         inp.value = op.letraOriginal;
-        inp.addEventListener("change", () => { respuestas[p.id] = op.letraOriginal; });
+        if (respuestas[p.id] === op.letraOriginal) inp.checked = true;
+        inp.addEventListener("change", () => {
+          respuestas[p.id] = op.letraOriginal;
+          guardarProgresoLocal();
+        });
 
         const span = document.createElement("span");
         const strong = document.createElement("strong");
@@ -1271,12 +1408,14 @@
           if (!(await confirmarAccion(`Respondiste ${n} de ${total} preguntas. ¿Confirmas el envío final?`))) return;
           tiemposPregunta.push(seg);
           logEvent(`Pregunta ${qIndex + 1}: ${seg} s | clics sin trayectoria acumulados: ${clicsSinTrayectoria}/${clicsMouse}`);
+          guardarProgresoLocal();
           await finalizarExamen(false);
           return;
         }
 
         tiemposPregunta.push(seg);
         logEvent(`Pregunta ${qIndex + 1}: ${seg} s | clics sin trayectoria acumulados: ${clicsSinTrayectoria}/${clicsMouse}`);
+        guardarProgresoLocal();
 
         if ((qIndex + 1) % TAM_BLOQUE === 0) {
           await cerrarBloqueDePreguntas();
@@ -1293,6 +1432,7 @@
       await cortarYSubir(`bloque_preg${pad(desde)}-${pad(hasta)}`);
       startRecording();
       bloqueInicio = hasta;
+      guardarProgresoLocal();
     }
 
     // =========================================================================
@@ -1418,6 +1558,10 @@
         if (pipVid && pipVid.paused) pipVid.play().catch(() => {});
       });
 
+      window.addEventListener("beforeunload", () => {
+        if (examActive && !finalizando) guardarProgresoLocal();
+      });
+
       let ticksSinTrack = 0, ticksTapado = 0, faltaTrack = false, faltaTapado = false, ruido = 0;
       monitorId = setInterval(() => {
         if (!examActive || pausedForPan) return;
@@ -1478,6 +1622,7 @@
       faltas++;
       logEvent(`FALTA ${faltas}/${maxFaltas}: ${motivo}`);
       document.getElementById("hud-strikes").textContent = `Advertencias: ${faltas} / ${maxFaltas}`;
+      guardarProgresoLocal();
 
       if (faltas >= maxFaltas) {
         finalizarExamen(true);
@@ -1549,6 +1694,7 @@
           }
         }
         resultadoFinal = res;
+        limpiarProgresoLocal();
 
         setBusy(true, "Generando tu comprobante...");
         evidenciaFinal = await generarComprobantePNG({
@@ -1690,6 +1836,9 @@
       overlay.appendChild(cerrar);
       document.body.appendChild(overlay);
     }
+
+    // Revisar al cargar si hay una sesión interrumpida por F5 / recarga
+    verificarSesionInterrumpida();
   </script>
 </body>
 </html>
