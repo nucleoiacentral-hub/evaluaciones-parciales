@@ -544,7 +544,7 @@
 
       <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Confirmo que cumplo con las cuatro condiciones anteriores.</span></label>
       <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que el examen se realiza en pantalla completa y que <strong>no debo presionar la tecla Esc</strong> durante la evaluación, ya que salir de pantalla completa genera una advertencia.</span></label>
-      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que salir de pantalla completa (incluyendo presionar Esc), cambiar de pestaña, copiar/pegar, usar atajos de captura/inspección o tapar la cámara genera una advertencia; con 3 advertencias el examen se cierra.</span></label>
+      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que salir de pantalla completa (incluyendo presionar Esc), cambiar de pestaña, copiar/pegar, usar atajos de captura/inspección, superponer ventanas o tapar la cámara genera una advertencia; con 3 advertencias el examen se cierra.</span></label>
 
       <div id="inst-error" class="alert alert-danger hidden" style="margin-top:12px;"></div>
 
@@ -555,6 +555,10 @@
     <div id="step-exam" class="hidden">
       <div id="cam-alert" class="alert alert-danger hidden" style="position:fixed; top:80px; left:50%; transform:translateX(-50%); z-index:1500; font-weight:700; max-width:90%; text-align:center; box-shadow: 0 8px 20px rgba(0,0,0,0.25);">
         📷 No se detecta imagen en la cámara. Descúbrela o ajústala para continuar.
+      </div>
+
+      <div id="focus-alert" class="alert alert-warning hidden" style="position:fixed; top:135px; left:50%; transform:translateX(-50%); z-index:1500; font-weight:700; max-width:90%; text-align:center; border:2px solid var(--warning); box-shadow: 0 8px 20px rgba(0,0,0,0.25);">
+        ⚠️ Se detectó salida o superposición sobre la ventana del examen (1/2). Una segunda pérdida de foco generará una falta oficial.
       </div>
 
       <div class="exam-hud">
@@ -1539,16 +1543,41 @@
         if (examActive && !document.fullscreenElement) registrarFalta("Salida de pantalla completa");
       });
 
-      // Difuminado visual y registro en bitácora al perder foco (sin falta ni castigo).
-      // La hora la agrega logEvent automáticamente. Filtro de 1 s para evitar duplicados.
+      // 5. Difuminado visual y escalado a falta cada 2 pérdidas de foco (aviso visible al volver el foco)
+      let perdidasFocoAcumuladas = 0;
+      let avisoFocoPendiente = false;
       let lastBlurLog = 0;
+      let timerFocusAlert = null;
+
+      function mostrarAlertaFoco() {
+        const banner = document.getElementById("focus-alert");
+        if (!banner) return;
+        banner.classList.remove("hidden");
+        clearTimeout(timerFocusAlert);
+        timerFocusAlert = setTimeout(() => {
+          banner.classList.add("hidden");
+        }, 6000);
+      }
+
       window.addEventListener("blur", () => {
         if (!examActive || pausedForPan) return;
         document.body.classList.add("privacy-blur");
         const ahora = Date.now();
-        if (ahora - lastBlurLog > 1000) {
-          lastBlurLog = ahora;
-          logEvent("Pérdida de foco de la ventana (posible app superpuesta, Lens o asistente).");
+        if (ahora - lastBlurLog < 1500) return;
+        lastBlurLog = ahora;
+
+        perdidasFocoAcumuladas++;
+        logEvent(`Pérdida de foco de la ventana (${perdidasFocoAcumuladas}/2 para falta; posible app superpuesta, Lens o asistente).`);
+
+        if (perdidasFocoAcumuladas === 1) {
+          avisoFocoPendiente = true;
+        } else if (perdidasFocoAcumuladas >= 2) {
+          perdidasFocoAcumuladas = 0;
+          avisoFocoPendiente = false;
+          clearTimeout(timerFocusAlert);
+          const banner = document.getElementById("focus-alert");
+          if (banner) banner.classList.add("hidden");
+          registrarFalta("Pérdida reiterada de foco de la ventana (posible app superpuesta, Lens o asistente)");
         }
       });
 
@@ -1556,6 +1585,10 @@
         document.body.classList.remove("privacy-blur");
         const pipVid = document.getElementById("pip-video");
         if (pipVid && pipVid.paused) pipVid.play().catch(() => {});
+        if (avisoFocoPendiente && examActive && !pausedForPan) {
+          avisoFocoPendiente = false;
+          mostrarAlertaFoco();
+        }
       });
 
       window.addEventListener("beforeunload", () => {
@@ -1653,6 +1686,7 @@
       document.getElementById("modal-warning").style.display = "none";
       document.getElementById("modal-confirm").style.display = "none";
       document.getElementById("cam-alert").classList.add("hidden");
+      document.getElementById("focus-alert").classList.add("hidden");
 
       try {
         const prom = tiemposPregunta.length ? Math.round(tiemposPregunta.reduce((a, b) => a + b, 0) / tiemposPregunta.length) : 0;
