@@ -528,12 +528,12 @@
         <li>No tengo cuadernos, libros, apuntes ni hojas a mi alcance.</li>
         <li>No tengo celular, tablet, laptop ni otro equipo al alcance (salvo el que usaré para el examen).</li>
         <li>Solo yo estoy en el lugar donde presento el examen.</li>
-        <li>Mantengo mi rostro visible y el micrófono activo durante toda la evaluación.</li>
+        <li>Mantengo mi rostro visible, buena iluminación y el micrófono activo durante toda la evaluación.</li>
       </ul>
 
       <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Confirmo que cumplo con las cuatro condiciones anteriores.</span></label>
-      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que el examen se realiza en pantalla completa.</span></label>
-      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que salir de pantalla completa, cambiar de pestaña, copiar/pegar, usar atajos de captura/inspección o tapar la cámara genera una advertencia; con 3 advertencias el examen se cierra.</span></label>
+      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que el examen se realiza en pantalla completa y que <strong>no debo presionar la tecla Esc</strong> durante la evaluación, ya que salir de pantalla completa genera una advertencia.</span></label>
+      <label class="checkbox-row"><input type="checkbox" class="chk-instr" /><span>Entiendo que salir de pantalla completa (incluyendo presionar Esc), cambiar de pestaña, copiar/pegar, usar atajos de captura/inspección o tapar la cámara genera una advertencia; con 3 advertencias el examen se cierra.</span></label>
 
       <div id="inst-error" class="alert alert-danger hidden" style="margin-top:12px;"></div>
 
@@ -741,7 +741,6 @@
       }
       const prom = s / n;
       const desv = Math.sqrt(Math.max(0, s2 / n - prom * prom));
-      console.log("cámara brillo:", prom.toFixed(1), "variación:", desv.toFixed(1)); // quítalo después de calibrar
       return prom < 20 || desv < 4;
     }
 
@@ -1443,7 +1442,7 @@
           ticksTapado++;
           if (ticksTapado === 1) logEvent("Imagen de cámara oscura o uniforme (posible obturador o lente tapado).");
           if (ticksTapado === 2) document.getElementById("cam-alert").classList.remove("hidden");
-          if (ticksTapado >= 3 && !faltaTapado) {
+          if (ticksTapado >= 8 && !faltaTapado) {
             faltaTapado = true;
             registrarFalta("Cámara obstruida o sin imagen");
           }
